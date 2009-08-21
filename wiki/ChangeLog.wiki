@@ -1,7 +1,7 @@
 ===Version 0.4 beta(2009/07/06):===
-* adding the function that pause/resume automatically according to the condition of GPS.("Speed", "Accuracy", "DOP", etc.)
-* adding "GPS Status", and "NMEA Viewer" command.
-* adding the record item of the KML format.("name", "description")
+  * adding the function that pause/resume automatically according to the condition of GPS.("Speed", "Accuracy", "DOP", etc.)
+  * adding "GPS Status", and "NMEA Viewer" command.
+  * adding the record item of the KML format.("name", "description")
 
 ===Version 0.3 beta(2009/06/13):===
 * adding the shortcut keys, the help command of it.
