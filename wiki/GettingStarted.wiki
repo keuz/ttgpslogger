@@ -1,5 +1,5 @@
 #labels Featured
- # Please download sis file of the latest version from the Web site.
+ # Please download sis file of the latest version from [http://code.google.com/p/ttgpslogger/downloads/list Downloads].
  # Please sign sis file with [https://www.symbiansigned.com/app/page/public/openSignedOnline.do Open Signed Online].<br>
    Please use and search for the Web site of Google about details of the signature method.<br>
    Capability needed in the signature process is only "Location".
