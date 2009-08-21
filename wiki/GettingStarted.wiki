@@ -1,7 +1,7 @@
 #labels Featured
-1. Please download the binary of the latest version from the Web site.
-2. Please sign the sis file with [https://www.symbiansigned.com/app/page/public/openSignedOnline.do Open Signed Online].
-   Please use and search for the Web site of Google about details of the signature method.
+ # Please download the binary of the latest version from the Web site.
+ # Please sign the sis file with [https://www.symbiansigned.com/app/page/public/openSignedOnline.do Open Signed Online].<br>
+   Please use and search for the Web site of Google about details of the signature method.<br>
    Capability needed in the signature process is only "Location".
-4. Please uninstall it absolutely if the previous version is installed in a mobile device.
-5. Please install signed TTGPSLogger.sis in a mobile device. 
+ # Please uninstall it absolutely if the previous version is installed in a mobile device.
+ # Please install signed TTGPSLogger.sis in a mobile device. 
