@@ -11,7 +11,7 @@
 
 ===Version 0.2 beta(2009/05/03):===
  * adding NMEA format as a GPS tracking format.(Only GPX and KML format : in the previous version.)
- * adding the record item of the GPX format.("<course>", "&lt;sat&gt;", etc.)
+ * adding the record item of the GPX format.("{{{<course>}}}", "&lt;sat&gt;", etc.)
  * adding the screen display item.("DOP", "Sat.Num.", etc.)
  * adding the settings item.("Positioning Method", etc.)
  * adding "Start" Command(time specified beginning).
