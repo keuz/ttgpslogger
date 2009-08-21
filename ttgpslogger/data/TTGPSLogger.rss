@@ -1,0 +1,1421 @@
+/*
+ * TTGPSLogger
+ * 
+ * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
+ * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
+ * 
+ * http://ttinputdiary.vox.com/
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+CHARACTER_SET UTF8
+
+NAME TTGP
+
+#include <eikon.rh>
+#include <avkon.rsg>
+#include <avkon.rh>
+#include <avkon.hrh>
+#include <appinfo.rh>
+#include <commondialogs.rh>
+#include "TTGPSLogger.hrh"
+#include "TTGPSLogger.rls"
+
+RESOURCE RSS_SIGNATURE
+	{
+	}
+RESOURCE EIK_APP_INFO
+	{
+	}
+RESOURCE TBUF r_default_document_name
+    {
+    buf = "TTGP";
+    }
+
+// ---------------------------------------------------------------------------- 
+// r_localisable_app_info
+// ---------------------------------------------------------------------------- 
+RESOURCE LOCALISABLE_APP_INFO r_localisable_app_info
+    {
+    short_caption = qtn_statuspane_title_mainview;
+    caption_and_icon = 
+    CAPTION_AND_ICON_INFO
+        {
+        caption = qtn_statuspane_title_mainview;
+
+        number_of_icons = 1;
+        icon_file = "\\resource\\apps\\TTGPSLogger.mif";
+        };
+    }
+
+// -----------------------------------------------------------------------------
+//  Status Panel resources.
+// -----------------------------------------------------------------------------
+RESOURCE TBUF32 r_ttgp_tbuf32_statuspane_title_main { buf = qtn_statuspane_title_mainview; }
+RESOURCE TBUF32 r_ttgp_tbuf32_statuspane_title_settings { buf = qtn_statuspane_title_settingsview; }
+RESOURCE TBUF32 r_ttgp_tbuf32_statuspane_title_gpsstatus { buf = qtn_statuspane_title_gpsstatus; }
+RESOURCE TBUF32 r_ttgp_tbuf32_statuspane_title_nmeaviewer { buf = qtn_statuspane_title_nmeaviewer; }
+
+// -----------------------------------------------------------------------------
+// Main View resources.
+// -----------------------------------------------------------------------------
+RESOURCE AVKON_VIEW r_ttgp_view_main
+    {
+    menubar = r_ttgp_menubar_main;
+    cba = r_ttgp_softkeys_options_startnow_hide;
+    }
+RESOURCE LISTBOX r_ttgp_view_main_listbox
+    {
+    flags = EAknListBoxViewerFlags;
+    }
+RESOURCE MENU_BAR r_ttgp_menubar_main
+	{
+	titles =
+		{
+		MENU_TITLE { menu_pane = r_ttgp_menupane_main; }
+		};
+	}
+RESOURCE MENU_PANE r_ttgp_menupane_main
+	{
+	items =
+		{
+		MENU_ITEM
+				{
+				command = ETTGPSLoggerCommandStartNow;
+				txt = qtn_command_main_startnow;
+				cascade = r_ttgp_menupane_main_startnow;
+				},
+        MENU_ITEM
+                {
+                command = ETTGPSLoggerCommandStart;
+                txt = qtn_command_main_start;
+                cascade = r_ttgp_menupane_main_start;
+                },
+		MENU_ITEM
+				{
+				command = ETTGPSLoggerCommandRecord;
+				txt = qtn_command_main_record;
+				},
+		MENU_ITEM
+				{
+				command = ETTGPSLoggerCommandPause;
+				txt = qtn_command_main_pause;
+				},
+		MENU_ITEM
+				{
+				command = ETTGPSLoggerCommandResume;
+				txt = qtn_command_main_resume;
+				},
+		MENU_ITEM
+				{
+				command = ETTGPSLoggerCommandStop;
+				txt = qtn_command_main_stop;
+				},
+        MENU_ITEM
+                {
+				command = ETTGPSLoggerCommandTool;
+				txt = qtn_command_main_tool;
+				cascade = r_ttgp_menupane_main_tool;
+                },
+		MENU_ITEM
+				{
+				command = ETTGPSLoggerCommandSettings;
+				txt = qtn_command_main_settings;
+				},
+		MENU_ITEM
+				{
+				command = ETTGPSLoggerCommandHelp;
+				txt = qtn_command_main_help;
+				cascade = r_ttgp_menupane_main_help;
+				},
+		MENU_ITEM
+				{
+				command = EAknSoftkeyExit;
+				txt = qtn_command_main_exit;
+				}
+		};
+	}
+RESOURCE MENU_PANE r_ttgp_menupane_main_startnow
+    {
+    items =
+        {
+        MENU_ITEM
+                {
+                command = ETTGPSLoggerCommandStartNowNMEA;
+                txt = qtn_command_main_start_nmea;
+                },
+        MENU_ITEM
+                {
+                command = ETTGPSLoggerCommandStartNowGPX;
+                txt = qtn_command_main_start_gpx;
+                },
+        MENU_ITEM
+                {
+                command = ETTGPSLoggerCommandStartNowKML;
+                txt = qtn_command_main_start_kml;
+                }
+        };
+    }
+RESOURCE MENU_PANE r_ttgp_menupane_main_start
+	{
+	items =
+		{
+		MENU_ITEM
+				{
+				command = ETTGPSLoggerCommandStartNMEA;
+				txt = qtn_command_main_start_nmea;
+				},
+		MENU_ITEM
+				{
+				command = ETTGPSLoggerCommandStartGPX;
+				txt = qtn_command_main_start_gpx;
+				},
+		MENU_ITEM
+				{
+				command = ETTGPSLoggerCommandStartKML;
+				txt = qtn_command_main_start_kml;
+				}
+		};
+	}
+RESOURCE MENU_PANE r_ttgp_menupane_main_tool
+    {
+    items =
+        {
+        MENU_ITEM
+                {
+                command = ETTGPSLoggerCommandToolSatellite;
+                txt = qtn_command_main_tool_satellite;
+                },
+        MENU_ITEM
+                {
+                command = ETTGPSLoggerCommandToolGPSStatus;
+                txt = qtn_command_main_tool_gpsstatus;
+                },
+        MENU_ITEM
+                {
+                command = ETTGPSLoggerCommandToolNMEAViewer;
+                txt = qtn_command_main_tool_nmeaviewer;
+                }
+        };
+    }
+RESOURCE MENU_PANE r_ttgp_menupane_main_help
+    {
+    items =
+        {
+        MENU_ITEM
+                {
+                command = ETTGPSLoggerCommandHelpAbout;
+                txt = qtn_command_main_help_about;
+                },
+        MENU_ITEM
+                {
+                command = ETTGPSLoggerCommandHelpShortcuts;
+                txt = qtn_command_main_help_shortcuts;
+                }
+        };
+    }
+
+// -----------------------------------------------------------------------------
+// Main View(Listbox Items) resources.
+// -----------------------------------------------------------------------------
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_filename { buf = qtn_mainview_listboxitem_filename; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_filepoint { buf = qtn_mainview_listboxitem_filepoint; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_lon { buf = qtn_mainview_listboxitem_lon; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_lat { buf = qtn_mainview_listboxitem_lat; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_alt { buf = qtn_mainview_listboxitem_alt; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_seaalt { buf = qtn_mainview_listboxitem_seaalt; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_hspeed { buf = qtn_mainview_listboxitem_hspeed; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_vspeed { buf = qtn_mainview_listboxitem_vspeed; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_course { buf = qtn_mainview_listboxitem_course; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_hacc { buf = qtn_mainview_listboxitem_hacc; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_vacc { buf = qtn_mainview_listboxitem_vacc; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_hdop { buf = qtn_mainview_listboxitem_hdop; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_vdop { buf = qtn_mainview_listboxitem_vdop; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_pdop { buf = qtn_mainview_listboxitem_pdop; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_satnum { buf = qtn_mainview_listboxitem_satnum; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_sattime { buf = qtn_mainview_listboxitem_sattime; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_listboxitem_systime { buf = qtn_mainview_listboxitem_systime; }
+
+// -----------------------------------------------------------------------------
+// Main View(Navistate) resources.
+// -----------------------------------------------------------------------------
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_navistate_none { buf = qtn_mainview_navistate_none; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_navistate_waiting { buf = qtn_mainview_navistate_waiting; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_navistate_recording { buf = qtn_mainview_navistate_recording; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_navistate_pausing { buf = qtn_mainview_navistate_pausing; }
+RESOURCE TBUF32 r_ttgp_tbuf32_mainview_navistate_autopausing { buf = qtn_mainview_navistate_autopausing; }
+
+// -----------------------------------------------------------------------------
+// Main View(Softkeys Options) resources.
+// -----------------------------------------------------------------------------
+RESOURCE CBA r_ttgp_softkeys_options_startnow_hide
+    {
+    buttons = 
+        {
+        CBA_BUTTON {id = EAknSoftkeyOptions; txt = qtn_softkey_options;},
+        CBA_BUTTON {id = ETTGPSLoggerCBAHide; txt = qtn_softkey_hide;},
+        CBA_BUTTON {id = ETTGPSLoggerCBAStartNow; txt = qtn_softkey_startnow;}
+        };
+    }
+RESOURCE CBA r_ttgp_softkeys_options_record_hide
+    {
+    buttons = 
+        {
+        CBA_BUTTON {id = EAknSoftkeyOptions; txt = qtn_softkey_options;},
+        CBA_BUTTON {id = ETTGPSLoggerCBAHide; txt = qtn_softkey_hide;},
+        CBA_BUTTON {id = ETTGPSLoggerCBARecord; txt = qtn_softkey_record;}
+        };
+    }
+RESOURCE CBA r_ttgp_softkeys_options_pause_hide
+    {
+    buttons = 
+        {
+        CBA_BUTTON {id = EAknSoftkeyOptions; txt = qtn_softkey_options;},
+        CBA_BUTTON {id = ETTGPSLoggerCBAHide; txt = qtn_softkey_hide;},
+        CBA_BUTTON {id = ETTGPSLoggerCBAPause; txt = qtn_softkey_pause;}
+        };
+    }
+RESOURCE CBA r_ttgp_softkeys_options_resume_hide
+    {
+    buttons = 
+        {
+        CBA_BUTTON {id = EAknSoftkeyOptions; txt = qtn_softkey_options;},
+        CBA_BUTTON {id = ETTGPSLoggerCBAHide; txt = qtn_softkey_hide;},
+        CBA_BUTTON {id = ETTGPSLoggerCBAResume; txt = qtn_softkey_resume;}
+        };
+    }
+RESOURCE CBA r_ttgp_softkeys_options_stop_hide
+    {
+    buttons = 
+        {
+        CBA_BUTTON {id = EAknSoftkeyOptions; txt = qtn_softkey_options;},
+        CBA_BUTTON {id = ETTGPSLoggerCBAHide; txt = qtn_softkey_hide;},
+        CBA_BUTTON {id = ETTGPSLoggerCBAStop; txt = qtn_softkey_stop;}
+        };
+    }
+RESOURCE CBA r_ttgp_softkeys_options_viewer
+    {
+    buttons = 
+        {
+        CBA_BUTTON {id = ETTGPSLoggerCBAReload; txt = qtn_softkey_reload;},
+        CBA_BUTTON {id = EAknSoftkeyBack; txt = qtn_softkey_back;},
+        CBA_BUTTON {id = ETTGPSLoggerCBACopy; txt = qtn_softkey_copy;}
+        };
+    }
+
+// -----------------------------------------------------------------------------
+// Settings View resources.
+// -----------------------------------------------------------------------------
+RESOURCE AVKON_VIEW r_ttgp_view_settings
+    {
+    cba = R_AVKON_SOFTKEYS_SELECT_BACK__SELECT;
+    }
+RESOURCE NAVI_DECORATOR r_ttgp_navidecorator_settings
+    {
+    type = ENaviDecoratorControlTabGroup;
+    control = TAB_GROUP
+        {
+        tab_width = EAknTabWidthWithThreeLongTabs;
+        active = 0;
+        tabs =
+            {
+            TAB
+                {
+                id = ETTGPSLoggerSettingsTabDisplay;
+                txt = qtn_tab_settings_display;
+                },
+            TAB
+                {
+                id = ETTGPSLoggerSettingsTabOutput;
+                txt = qtn_tab_settings_output;
+                },
+            TAB
+                {
+                id = ETTGPSLoggerSettingsTabNMEA;
+                txt = qtn_tab_settings_nmea;
+                },
+            TAB
+                {
+                id = ETTGPSLoggerSettingsTabGPX;
+                txt = qtn_tab_settings_gpx;
+                },
+            TAB
+                {
+                id = ETTGPSLoggerSettingsTabKML;
+                txt = qtn_tab_settings_kml;
+                }
+            };
+        };
+    }
+
+
+RESOURCE AVKON_SETTING_ITEM_LIST r_ttgp_settingitemlist_display
+    {
+    flags = 0;
+    title = "";
+    initial_number = 1;
+    items = 
+        {
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemDisplayMeasurementSystem;
+            setting_page_resource = r_ttgp_settingspage_display_measurementsystem;
+            associated_resource = r_ttgp_popupsettingstexts_display_measurementsystem;
+            name = qtn_settingsitem_display_measurementsystem;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemDisplayCoordinateFormat;
+            setting_page_resource = r_ttgp_settingspage_display_coordinateformat;
+            associated_resource = r_ttgp_popupsettingstexts_display_coordinateformat;
+            name = qtn_settingsitem_display_coordinateformat;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemDisplayItems;
+            setting_page_resource = r_ttgp_settingspage_display_items;
+            associated_resource = r_ttgp_popupsettingstexts_display_items;
+            name = qtn_settingsitem_display_items;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemDisplayShortcuts;
+            setting_page_resource = r_ttgp_settingspage_display_shortcuts;
+            associated_resource = r_ttgp_popupsettingstexts_display_shortcuts;
+            name = qtn_settingsitem_display_shortcuts;
+            }
+        };
+    }
+RESOURCE AVKON_SETTING_ITEM_LIST r_ttgp_settingitemlist_output
+    {
+    flags = 0;
+    title = "";
+    initial_number = 1;
+    items = 
+        {
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemOutputAutostart;
+            setting_page_resource = r_ttgp_settingspage_output_autostart;
+            associated_resource = r_ttgp_popupsettingstexts_output_autostart;
+            name = qtn_settingsitem_output_autostart;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemOutputMemory;
+            setting_page_resource = r_ttgp_memoryselectiondialog_output_memory;
+            name = qtn_settingsitem_output_memory;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemOutputIntervals;
+            setting_page_resource = r_ttgp_settingspage_output_intervals;
+            associated_resource = r_ttgp_popupsettingstexts_output_intervals;
+            name = qtn_settingsitem_output_intervals;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemOutputDistance;
+            setting_page_resource = r_ttgp_settingspage_output_distance;
+            associated_resource = r_ttgp_popupsettingstexts_output_distance;
+            name = qtn_settingsitem_output_distance;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemOutputAutoPauseHSpeed;
+            setting_page_resource = r_ttgp_settingspage_output_autopausehspeed;
+            associated_resource = r_ttgp_popupsettingstexts_output_autopausespeed;
+            name = qtn_settingsitem_output_autopausehspeed;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemOutputAutoPauseSpeed;
+            setting_page_resource = r_ttgp_settingspage_output_autopausespeed;
+            associated_resource = r_ttgp_popupsettingstexts_output_autopausespeed;
+            name = qtn_settingsitem_output_autopausespeed;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemOutputAutoPauseHAcc;
+            setting_page_resource = r_ttgp_settingspage_output_autopausehacc;
+            associated_resource = r_ttgp_popupsettingstexts_output_autopausehacc;
+            name = qtn_settingsitem_output_autopausehacc;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemOutputAutoPauseHDOP;
+            setting_page_resource = r_ttgp_settingspage_output_autopausehdop;
+            associated_resource = r_ttgp_popupsettingstexts_output_autopausedop;
+            name = qtn_settingsitem_output_autopausehdop;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemOutputAutoPausePDOP;
+            setting_page_resource = r_ttgp_settingspage_output_autopausepdop;
+            associated_resource = r_ttgp_popupsettingstexts_output_autopausedop;
+            name = qtn_settingsitem_output_autopausepdop;
+            }
+        };
+    }
+RESOURCE AVKON_SETTING_ITEM_LIST r_ttgp_settingitemlist_nmea
+    {
+    flags = 0;
+    title = "";
+    initial_number = 1;
+    items = 
+        {
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemNMEAExt;
+            setting_page_resource = r_ttgp_settingspage_nmea_ext;
+            name = qtn_settingsitem_nmea_ext;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemNMEASentences;
+            setting_page_resource = r_ttgp_settingspage_nmea_sentences;
+            associated_resource = r_ttgp_popupsettingstexts_nmea_sentences;
+            name = qtn_settingsitem_nmea_sentences;
+            }
+        };
+    }
+RESOURCE AVKON_SETTING_ITEM_LIST r_ttgp_settingitemlist_gpx
+    {
+    flags = 0;
+    title = "";
+    initial_number = 1;
+    items = 
+        {
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemGPXExt;
+            setting_page_resource = r_ttgp_settingspage_gpx_ext;
+            name = qtn_settingsitem_gpx_ext;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemGPXTags;
+            setting_page_resource = r_ttgp_settingspage_gpx_tags;
+            associated_resource = r_ttgp_popupsettingstexts_gpx_tags;
+            name = qtn_settingsitem_gpx_tags;
+            }
+        };
+    }
+RESOURCE AVKON_SETTING_ITEM_LIST r_ttgp_settingitemlist_kml
+    {
+    flags = 0;
+    title = "";
+    initial_number = 1;
+    items = 
+        {
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemKMLExt;
+            setting_page_resource = r_ttgp_settingspage_kml_ext;
+            name = qtn_settingsitem_kml_ext;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemKMLPmName;
+            setting_page_resource = r_ttgp_settingspage_kml_pmname;
+            associated_resource = r_ttgp_popupsettingstexts_kml_pmname;
+            name = qtn_settingsitem_kml_pmname;
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ETTGPSLoggerSettingItemKMLPmDescription;
+            setting_page_resource = r_ttgp_settingspage_kml_pmdescription;
+            associated_resource = r_ttgp_popupsettingstexts_kml_pmdescription;
+            name = qtn_settingsitem_kml_pmdescription;
+            }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_display_measurementsystem
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_display_measurementsystem;
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_ttgp_popupsettinglist_display_measurementsystem;
+    }
+RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_display_measurementsystem
+    {
+    flags = 0;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_display_measurementsystem
+    {
+    setting_texts_resource   = r_ttgp_arraysettingstexts_display_measurementsystem;
+    popped_up_texts_resource = r_ttgp_arraypopeduptexts_display_measurementsystem;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_display_measurementsystem
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0; text = qtn_settingsitem_display_measurementsystem_metric; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = qtn_settingsitem_display_measurementsystem_imperial; }
+        };
+    }
+RESOURCE ARRAY r_ttgp_arraypopeduptexts_display_measurementsystem
+    {
+    items =
+        {
+        LBUF { txt = qtn_settingsitem_display_measurementsystem_metric; },
+        LBUF { txt = qtn_settingsitem_display_measurementsystem_imperial; }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_display_coordinateformat
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_display_coordinateformat;
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_ttgp_popupsettinglist_display_coordinateformat;
+    }
+RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_display_coordinateformat
+    {
+    flags = 0;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_display_coordinateformat
+    {
+    setting_texts_resource   = r_ttgp_arraysettingstexts_display_coordinateformat;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_display_coordinateformat
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0; text = qtn_settingsitem_display_coordinateformat_DDDMMSSSS; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = qtn_settingsitem_display_coordinateformat_DDDMMMMMM; },
+        AVKON_ENUMERATED_TEXT { value = 2; text = qtn_settingsitem_display_coordinateformat_DDDDDDDD;  }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_display_items
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_display_items;
+    type = EAknSetListBox;
+    softkey_resource = R_AVKON_SOFTKEYS_OK_CANCEL__MARK;
+    invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL;
+    editor_resource_id = r_ttgp_popupsettinglist_display_items;
+    }
+RESOURCE LISTBOX r_ttgp_popupsettinglist_display_items
+    {
+	flags = EEikListBoxMultipleSelection;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_display_items
+    {
+    setting_texts_resource   = r_ttgp_arraysettingstexts_display_items;
+    popped_up_texts_resource = r_ttgp_arraypopeduptexts_display_items;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_display_items
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0;  text = qtn_settingsitem_display_items_lon; },
+        AVKON_ENUMERATED_TEXT { value = 1;  text = qtn_settingsitem_display_items_lat; },
+        AVKON_ENUMERATED_TEXT { value = 2;  text = qtn_settingsitem_display_items_alt; },
+        AVKON_ENUMERATED_TEXT { value = 3;  text = qtn_settingsitem_display_items_seaalt; },
+        AVKON_ENUMERATED_TEXT { value = 4;  text = qtn_settingsitem_display_items_hspeedwithvspeed; },
+        AVKON_ENUMERATED_TEXT { value = 5;  text = qtn_settingsitem_display_items_hspeed; },
+        AVKON_ENUMERATED_TEXT { value = 6;  text = qtn_settingsitem_display_items_vspeed; },
+        AVKON_ENUMERATED_TEXT { value = 7;  text = qtn_settingsitem_display_items_course; },
+        AVKON_ENUMERATED_TEXT { value = 8;  text = qtn_settingsitem_display_items_haccwithvacc; },
+        AVKON_ENUMERATED_TEXT { value = 9;  text = qtn_settingsitem_display_items_hacc; },
+        AVKON_ENUMERATED_TEXT { value = 10; text = qtn_settingsitem_display_items_vacc; },
+        AVKON_ENUMERATED_TEXT { value = 11; text = qtn_settingsitem_display_items_hdopwithvdop; },
+        AVKON_ENUMERATED_TEXT { value = 12; text = qtn_settingsitem_display_items_hdop; },
+        AVKON_ENUMERATED_TEXT { value = 13; text = qtn_settingsitem_display_items_vdop; },
+        AVKON_ENUMERATED_TEXT { value = 14; text = qtn_settingsitem_display_items_pdop; },
+        AVKON_ENUMERATED_TEXT { value = 15; text = qtn_settingsitem_display_items_satnum; },
+        AVKON_ENUMERATED_TEXT { value = 16; text = qtn_settingsitem_display_items_sattime; },
+        AVKON_ENUMERATED_TEXT { value = 17; text = qtn_settingsitem_display_items_systime; }
+        };
+    }
+RESOURCE ARRAY r_ttgp_arraypopeduptexts_display_items
+    {
+    items =
+        {
+        LBUF { txt = qtn_settingsitem_display_items_lon; },
+        LBUF { txt = qtn_settingsitem_display_items_lat; },
+        LBUF { txt = qtn_settingsitem_display_items_alt; },
+        LBUF { txt = qtn_settingsitem_display_items_seaalt; },
+        LBUF { txt = qtn_settingsitem_display_items_hspeedwithvspeed; },
+        LBUF { txt = qtn_settingsitem_display_items_hspeed; },
+        LBUF { txt = qtn_settingsitem_display_items_vspeed; },
+        LBUF { txt = qtn_settingsitem_display_items_course; },
+        LBUF { txt = qtn_settingsitem_display_items_haccwithvacc; },
+        LBUF { txt = qtn_settingsitem_display_items_hacc; },
+        LBUF { txt = qtn_settingsitem_display_items_vacc; },
+        LBUF { txt = qtn_settingsitem_display_items_hdopwithvdop; },
+        LBUF { txt = qtn_settingsitem_display_items_hdop; },
+        LBUF { txt = qtn_settingsitem_display_items_vdop; },
+        LBUF { txt = qtn_settingsitem_display_items_pdop; },
+        LBUF { txt = qtn_settingsitem_display_items_satnum; },
+        LBUF { txt = qtn_settingsitem_display_items_sattime; },
+        LBUF { txt = qtn_settingsitem_display_items_sattime; }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_display_shortcuts
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_display_shortcuts;
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_ttgp_popupsettinglist_display_shortcuts;
+    }
+RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_display_shortcuts
+    {
+    flags = 0;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_display_shortcuts
+    {
+    setting_texts_resource   = r_ttgp_arraysettingstexts_display_shortcuts;
+    popped_up_texts_resource = r_ttgp_arraypopeduptexts_display_shortcuts;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_display_shortcuts
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0; text = qtn_settingsitem_display_shortcuts_disabled; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = qtn_settingsitem_display_shortcuts_enabled; }
+        };
+    }
+RESOURCE ARRAY r_ttgp_arraypopeduptexts_display_shortcuts
+    {
+    items =
+        {
+        LBUF { txt = qtn_settingsitem_display_shortcuts_disabled; },
+        LBUF { txt = qtn_settingsitem_display_shortcuts_enabled; }
+        };
+    }
+
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autostart
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_output_autostart;
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_ttgp_popupsettinglist_output_autostart;
+    }
+RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_output_autostart
+    {
+    flags = 0;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_output_autostart
+    {
+    setting_texts_resource   = r_ttgp_arraysettingstexts_output_autostart;
+    popped_up_texts_resource = r_ttgp_arraypopeduptexts_output_autostart;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_output_autostart
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0; text = qtn_settingsitem_output_autostart_disabled; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = qtn_settingsitem_output_autostart_nmea; },
+        AVKON_ENUMERATED_TEXT { value = 2; text = qtn_settingsitem_output_autostart_gpx; },
+        AVKON_ENUMERATED_TEXT { value = 3; text = qtn_settingsitem_output_autostart_kml; }
+        };
+    }
+RESOURCE ARRAY r_ttgp_arraypopeduptexts_output_autostart
+    {
+    items =
+        {
+        LBUF { txt = qtn_settingsitem_output_autostart_disabled; },
+        LBUF { txt = qtn_settingsitem_output_autostart_nmea; },
+        LBUF { txt = qtn_settingsitem_output_autostart_gpx; },
+        LBUF { txt = qtn_settingsitem_output_autostart_kml; }
+        };
+    }
+
+RESOURCE MEMORYSELECTIONDIALOG r_ttgp_memoryselectiondialog_output_memory
+    {
+    title = qtn_settingsitem_output_memory;
+    locations =
+        {
+        LOCATION
+            {
+            root_path = "c:\\data\\";
+            default_folder = "images\\";
+            },
+        LOCATION
+            {
+            root_path = "e:\\";
+            }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_intervals
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_output_intervals;
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_ttgp_popupsettinglist_output_intervals;
+    }
+RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_output_intervals
+    {
+    flags = 0;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_output_intervals
+    {
+    setting_texts_resource = r_ttgp_arraysettingstexts_output_intervals;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_output_intervals
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0; text = qtn_settingsitem_output_intervals_none; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = qtn_settingsitem_output_intervals_1sec; },
+        AVKON_ENUMERATED_TEXT { value = 2; text = qtn_settingsitem_output_intervals_5sec; },
+        AVKON_ENUMERATED_TEXT { value = 3; text = qtn_settingsitem_output_intervals_10sec; },
+        AVKON_ENUMERATED_TEXT { value = 4; text = qtn_settingsitem_output_intervals_15sec; },
+        AVKON_ENUMERATED_TEXT { value = 5; text = qtn_settingsitem_output_intervals_20sec; },
+        AVKON_ENUMERATED_TEXT { value = 6; text = qtn_settingsitem_output_intervals_30sec; },
+        AVKON_ENUMERATED_TEXT { value = 7; text = qtn_settingsitem_output_intervals_60sec; }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_distance
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_output_distance;
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_ttgp_popupsettinglist_output_distance;
+    }
+RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_output_distance
+    {
+    flags = 0;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_output_distance
+    {
+    setting_texts_resource = r_ttgp_arraysettingstexts_output_distance;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_output_distance
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0; text = qtn_settingsitem_output_distance_none; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = qtn_settingsitem_output_distance_10m; },
+        AVKON_ENUMERATED_TEXT { value = 2; text = qtn_settingsitem_output_distance_20m; },
+        AVKON_ENUMERATED_TEXT { value = 3; text = qtn_settingsitem_output_distance_25m; },
+        AVKON_ENUMERATED_TEXT { value = 4; text = qtn_settingsitem_output_distance_50m; },
+        AVKON_ENUMERATED_TEXT { value = 5; text = qtn_settingsitem_output_distance_100m; },
+        AVKON_ENUMERATED_TEXT { value = 6; text = qtn_settingsitem_output_distance_200m; },
+        AVKON_ENUMERATED_TEXT { value = 7; text = qtn_settingsitem_output_distance_250m; },
+        AVKON_ENUMERATED_TEXT { value = 8; text = qtn_settingsitem_output_distance_500m; },
+        AVKON_ENUMERATED_TEXT { value = 9; text = qtn_settingsitem_output_distance_1000m; }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autopausehspeed
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_output_autopausehspeed;
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_ttgp_popupsettinglist_output_autopausespeed;
+    }
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autopausespeed
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_output_autopausespeed;
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_ttgp_popupsettinglist_output_autopausespeed;
+    }
+RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_output_autopausespeed
+    {
+    flags = 0;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_output_autopausespeed
+    {
+    setting_texts_resource = r_ttgp_arraysettingstexts_output_autopausespeed;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_output_autopausespeed
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0; text = qtn_settingsitem_output_autopausespeed_none; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = qtn_settingsitem_output_autopausespeed_0; },
+        AVKON_ENUMERATED_TEXT { value = 2; text = qtn_settingsitem_output_autopausespeed_1; },
+        AVKON_ENUMERATED_TEXT { value = 3; text = qtn_settingsitem_output_autopausespeed_2; },
+        AVKON_ENUMERATED_TEXT { value = 4; text = qtn_settingsitem_output_autopausespeed_3; },
+        AVKON_ENUMERATED_TEXT { value = 5; text = qtn_settingsitem_output_autopausespeed_4; },
+        AVKON_ENUMERATED_TEXT { value = 6; text = qtn_settingsitem_output_autopausespeed_5; },
+        AVKON_ENUMERATED_TEXT { value = 7; text = qtn_settingsitem_output_autopausespeed_10; },
+        AVKON_ENUMERATED_TEXT { value = 8; text = qtn_settingsitem_output_autopausespeed_20; }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autopausehacc
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_output_autopausehacc;
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_ttgp_popupsettinglist_output_autopausehacc;
+    }
+RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_output_autopausehacc
+    {
+    flags = 0;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_output_autopausehacc
+    {
+    setting_texts_resource = r_ttgp_arraysettingstexts_output_autopausehacc;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_output_autopausehacc
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0; text = qtn_settingsitem_output_autopausehacc_none; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = qtn_settingsitem_output_autopausehacc_10; },
+        AVKON_ENUMERATED_TEXT { value = 2; text = qtn_settingsitem_output_autopausehacc_20; },
+        AVKON_ENUMERATED_TEXT { value = 3; text = qtn_settingsitem_output_autopausehacc_30; },
+        AVKON_ENUMERATED_TEXT { value = 4; text = qtn_settingsitem_output_autopausehacc_40; },
+        AVKON_ENUMERATED_TEXT { value = 5; text = qtn_settingsitem_output_autopausehacc_50; },
+        AVKON_ENUMERATED_TEXT { value = 6; text = qtn_settingsitem_output_autopausehacc_100; }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autopausehdop
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_output_autopausehdop;
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_ttgp_popupsettinglist_output_autopausedop;
+    }
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autopausepdop
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_output_autopausepdop;
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_ttgp_popupsettinglist_output_autopausedop;
+    }
+RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_output_autopausedop
+    {
+    flags = 0;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_output_autopausedop
+    {
+    setting_texts_resource = r_ttgp_arraysettingstexts_output_autopausedop;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_output_autopausedop
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0; text = qtn_settingsitem_output_autopausedop_none; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = qtn_settingsitem_output_autopausedop_2; },
+        AVKON_ENUMERATED_TEXT { value = 2; text = qtn_settingsitem_output_autopausedop_3; },
+        AVKON_ENUMERATED_TEXT { value = 3; text = qtn_settingsitem_output_autopausedop_4; },
+        AVKON_ENUMERATED_TEXT { value = 4; text = qtn_settingsitem_output_autopausedop_5; },
+        AVKON_ENUMERATED_TEXT { value = 5; text = qtn_settingsitem_output_autopausedop_6; },
+        AVKON_ENUMERATED_TEXT { value = 6; text = qtn_settingsitem_output_autopausedop_7; },
+        AVKON_ENUMERATED_TEXT { value = 7; text = qtn_settingsitem_output_autopausedop_8; },
+        AVKON_ENUMERATED_TEXT { value = 8; text = qtn_settingsitem_output_autopausedop_9; },
+        AVKON_ENUMERATED_TEXT { value = 9; text = qtn_settingsitem_output_autopausedop_10; },
+        AVKON_ENUMERATED_TEXT { value = 10; text = qtn_settingsitem_output_autopausedop_20; }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_nmea_ext
+    {
+    label = qtn_settingsitem_nmea_ext;
+    type = EEikCtEdwin;
+    editor_resource_id = r_ttgp_edwin_nmea_ext;
+    hint_text = "";
+    }
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_gpx_ext
+    {
+    label = qtn_settingsitem_gpx_ext;
+    type = EEikCtEdwin;
+    editor_resource_id = r_ttgp_edwin_nmea_ext;
+    hint_text = "";
+    }
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_kml_ext
+    {
+    label = qtn_settingsitem_kml_ext;
+    type = EEikCtEdwin;
+    editor_resource_id = r_ttgp_edwin_nmea_ext;
+    hint_text = "";
+    }
+RESOURCE EDWIN r_ttgp_edwin_nmea_ext
+    {
+    maxlength = 100;
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_nmea_sentences
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_nmea_sentences;
+    type = EAknSetListBox;
+    softkey_resource = R_AVKON_SOFTKEYS_OK_CANCEL__MARK;
+    invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL;
+    editor_resource_id = r_ttgp_popupsettinglist_nmea_sentences;
+    }
+RESOURCE LISTBOX r_ttgp_popupsettinglist_nmea_sentences
+    {
+	flags = EEikListBoxMultipleSelection;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_nmea_sentences
+    {
+    setting_texts_resource   = r_ttgp_arraysettingstexts_nmea_sentences;
+    popped_up_texts_resource = r_ttgp_arraypopeduptexts_nmea_sentences;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_nmea_sentences
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0;  text = qtn_settingsitem_nmea_sentences_gpgga; },
+        AVKON_ENUMERATED_TEXT { value = 1;  text = qtn_settingsitem_nmea_sentences_gpgll; },
+        AVKON_ENUMERATED_TEXT { value = 2;  text = qtn_settingsitem_nmea_sentences_gpgsa; },
+        AVKON_ENUMERATED_TEXT { value = 3;  text = qtn_settingsitem_nmea_sentences_gpgst; },
+        AVKON_ENUMERATED_TEXT { value = 4;  text = qtn_settingsitem_nmea_sentences_gpgsv; },
+        AVKON_ENUMERATED_TEXT { value = 5;  text = qtn_settingsitem_nmea_sentences_gprmc; },
+        AVKON_ENUMERATED_TEXT { value = 6;  text = qtn_settingsitem_nmea_sentences_gpvtg; },
+        AVKON_ENUMERATED_TEXT { value = 7;  text = qtn_settingsitem_nmea_sentences_gpzda; },
+        AVKON_ENUMERATED_TEXT { value = 8;  text = qtn_settingsitem_nmea_sentences_others; }
+        };
+    }
+RESOURCE ARRAY r_ttgp_arraypopeduptexts_nmea_sentences
+    {
+    items =
+        {
+        LBUF { txt = qtn_settingsitem_nmea_sentences_gpgga; },
+        LBUF { txt = qtn_settingsitem_nmea_sentences_gpgll; },
+        LBUF { txt = qtn_settingsitem_nmea_sentences_gpgsa; },
+        LBUF { txt = qtn_settingsitem_nmea_sentences_gpgst; },
+        LBUF { txt = qtn_settingsitem_nmea_sentences_gpgsv; },
+        LBUF { txt = qtn_settingsitem_nmea_sentences_gprmc; },
+        LBUF { txt = qtn_settingsitem_nmea_sentences_gpvtg; },
+        LBUF { txt = qtn_settingsitem_nmea_sentences_gpzda; },
+        LBUF { txt = qtn_settingsitem_nmea_sentences_others; }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_gpx_tags
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_gpx_tags;
+    type = EAknSetListBox;
+    softkey_resource = R_AVKON_SOFTKEYS_OK_CANCEL__MARK;
+    invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL;
+    editor_resource_id = r_ttgp_popupsettinglist_gpx_tags;
+    }
+RESOURCE LISTBOX r_ttgp_popupsettinglist_gpx_tags
+    {
+	flags = EEikListBoxMultipleSelection;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_gpx_tags
+    {
+    setting_texts_resource   = r_ttgp_arraysettingstexts_gpx_tags;
+    popped_up_texts_resource = r_ttgp_arraypopeduptexts_gpx_tags;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_gpx_tags
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0;  text = qtn_settingsitem_gpx_tags_time; },
+        AVKON_ENUMERATED_TEXT { value = 1;  text = qtn_settingsitem_gpx_tags_ele; },
+        AVKON_ENUMERATED_TEXT { value = 2;  text = qtn_settingsitem_gpx_tags_course; },
+        AVKON_ENUMERATED_TEXT { value = 3;  text = qtn_settingsitem_gpx_tags_speed; },
+        AVKON_ENUMERATED_TEXT { value = 4;  text = qtn_settingsitem_gpx_tags_fix; },
+        AVKON_ENUMERATED_TEXT { value = 5;  text = qtn_settingsitem_gpx_tags_sat; },
+        AVKON_ENUMERATED_TEXT { value = 6;  text = qtn_settingsitem_gpx_tags_hdop; },
+        AVKON_ENUMERATED_TEXT { value = 7;  text = qtn_settingsitem_gpx_tags_vdop; },
+        AVKON_ENUMERATED_TEXT { value = 8;  text = qtn_settingsitem_gpx_tags_pdop; }
+        };
+    }
+RESOURCE ARRAY r_ttgp_arraypopeduptexts_gpx_tags
+    {
+    items =
+        {
+        LBUF { txt = qtn_settingsitem_gpx_tags_time; },
+        LBUF { txt = qtn_settingsitem_gpx_tags_ele; },
+        LBUF { txt = qtn_settingsitem_gpx_tags_course; },
+        LBUF { txt = qtn_settingsitem_gpx_tags_speed; },
+        LBUF { txt = qtn_settingsitem_gpx_tags_fix; },
+        LBUF { txt = qtn_settingsitem_gpx_tags_sat; },
+        LBUF { txt = qtn_settingsitem_gpx_tags_hdop; },
+        LBUF { txt = qtn_settingsitem_gpx_tags_vdop; },
+        LBUF { txt = qtn_settingsitem_gpx_tags_pdop; }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_kml_pmname
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_kml_pmname;
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_ttgp_popupsettinglist_kml_pmname;
+    }
+RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_kml_pmname
+    {
+    flags = 0;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_kml_pmname
+    {
+    setting_texts_resource   = r_ttgp_arraysettingstexts_kml_pmname;
+    popped_up_texts_resource = r_ttgp_arraypopeduptexts_kml_pmname;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_kml_pmname
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0; text = qtn_settingsitem_kml_pmname_none; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = qtn_settingsitem_kml_pmname_point; },
+        AVKON_ENUMERATED_TEXT { value = 2; text = qtn_settingsitem_kml_pmname_timeutc; },
+        AVKON_ENUMERATED_TEXT { value = 3; text = qtn_settingsitem_kml_pmname_timelocal; }
+        };
+    }
+RESOURCE ARRAY r_ttgp_arraypopeduptexts_kml_pmname
+    {
+    items =
+        {
+        LBUF { txt = qtn_settingsitem_kml_pmname_none; },
+        LBUF { txt = qtn_settingsitem_kml_pmname_point; },
+        LBUF { txt = qtn_settingsitem_kml_pmname_timeutc; },
+        LBUF { txt = qtn_settingsitem_kml_pmname_timelocal; }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_kml_pmdescription
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_kml_pmdescription;
+    type = EAknSetListBox;
+    softkey_resource = R_AVKON_SOFTKEYS_OK_CANCEL__MARK;
+    invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL;
+    editor_resource_id = r_ttgp_popupsettinglist_kml_pmdescription;
+    }
+RESOURCE LISTBOX r_ttgp_popupsettinglist_kml_pmdescription
+    {
+	flags = EEikListBoxMultipleSelection;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_kml_pmdescription
+    {
+    setting_texts_resource   = r_ttgp_arraysettingstexts_kml_pmdescription;
+    popped_up_texts_resource = r_ttgp_arraypopeduptexts_kml_pmdescription;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_kml_pmdescription
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0;  text = qtn_settingsitem_kml_pmdescription_point; },
+        AVKON_ENUMERATED_TEXT { value = 1;  text = qtn_settingsitem_kml_pmdescription_lon; },
+        AVKON_ENUMERATED_TEXT { value = 2;  text = qtn_settingsitem_kml_pmdescription_lat; },
+        AVKON_ENUMERATED_TEXT { value = 3;  text = qtn_settingsitem_kml_pmdescription_alt; },
+        AVKON_ENUMERATED_TEXT { value = 4;  text = qtn_settingsitem_kml_pmdescription_seaalt; },
+        AVKON_ENUMERATED_TEXT { value = 5;  text = qtn_settingsitem_kml_pmdescription_hspeed; },
+        AVKON_ENUMERATED_TEXT { value = 6;  text = qtn_settingsitem_kml_pmdescription_vspeed; },
+        AVKON_ENUMERATED_TEXT { value = 7;  text = qtn_settingsitem_kml_pmdescription_course; },
+        AVKON_ENUMERATED_TEXT { value = 8;  text = qtn_settingsitem_kml_pmdescription_hacc; },
+        AVKON_ENUMERATED_TEXT { value = 9;  text = qtn_settingsitem_kml_pmdescription_vacc; },
+        AVKON_ENUMERATED_TEXT { value = 10;  text = qtn_settingsitem_kml_pmdescription_hdop; },
+        AVKON_ENUMERATED_TEXT { value = 11;  text = qtn_settingsitem_kml_pmdescription_vdop; },
+        AVKON_ENUMERATED_TEXT { value = 12;  text = qtn_settingsitem_kml_pmdescription_pdop; },
+        AVKON_ENUMERATED_TEXT { value = 13;  text = qtn_settingsitem_kml_pmdescription_satnum; },
+        AVKON_ENUMERATED_TEXT { value = 14;  text = qtn_settingsitem_kml_pmdescription_sattimeutc; },
+        AVKON_ENUMERATED_TEXT { value = 15;  text = qtn_settingsitem_kml_pmdescription_sattimelocal; }
+        };
+    }
+RESOURCE ARRAY r_ttgp_arraypopeduptexts_kml_pmdescription
+    {
+    items =
+        {
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_point; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_lon; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_lat; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_alt; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_seaalt; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_hspeed; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_vspeed; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_course; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_hacc; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_vacc; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_hdop; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_vdop; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_pdop; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_satnum; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_sattimeutc; },
+        LBUF { txt = qtn_settingsitem_kml_pmdescription_sattimelocal; }
+        };
+    }
+
+// -----------------------------------------------------------------------------
+// Viewer View(GPS Status, NMEA Viewer) resources.
+// -----------------------------------------------------------------------------
+RESOURCE AVKON_VIEW r_ttgp_view_viewer
+    {
+    cba = r_ttgp_softkeys_options_viewer;
+    }
+RESOURCE EDWIN r_ttgp_edwin_viewer
+{
+	maxlength = 8192;
+	flags = EEikEdwinNoHorizScrolling | EEikEdwinInclusiveSizeFixed | EEikEdwinReadOnly | EEikEdwinDisplayOnly | EEikEdwinNoAutoSelection | EEikEdwinLineCursor | EEikEdwinAvkonDisableCursor;
+	avkon_flags = EAknEditorFlagEnableScrollBars;
+}
+
+// -----------------------------------------------------------------------------
+// Viewer View(GPS Status Items) resources.
+// -----------------------------------------------------------------------------
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_modid { buf = qtn_gpsstatusview_item_modid; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_modname { buf = qtn_gpsstatusview_item_modname; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_lon { buf = qtn_gpsstatusview_item_lon; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_lat { buf = qtn_gpsstatusview_item_lat; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_alt { buf = qtn_gpsstatusview_item_alt; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_seaalt { buf = qtn_gpsstatusview_item_seaalt; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_geosep { buf = qtn_gpsstatusview_item_geosep; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_hacc { buf = qtn_gpsstatusview_item_hacc; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_vacc { buf = qtn_gpsstatusview_item_vacc; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_hspeed { buf = qtn_gpsstatusview_item_hspeed; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_vspeed { buf = qtn_gpsstatusview_item_vspeed; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_tcourse { buf = qtn_gpsstatusview_item_tcourse; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_mcourse { buf = qtn_gpsstatusview_item_mcourse; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_heading { buf = qtn_gpsstatusview_item_heading; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_mheading { buf = qtn_gpsstatusview_item_mheading; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_hdop { buf = qtn_gpsstatusview_item_hdop; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_vdop { buf = qtn_gpsstatusview_item_vdop; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_pdop { buf = qtn_gpsstatusview_item_pdop; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_tdop { buf = qtn_gpsstatusview_item_tdop; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_satnuminview { buf = qtn_gpsstatusview_item_satnuminview; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_satnumused { buf = qtn_gpsstatusview_item_satnumused; }
+RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_sattime { buf = qtn_gpsstatusview_item_sattime; }
+
+// -----------------------------------------------------------------------------
+//  Settings(Initial Value) resources.
+// -----------------------------------------------------------------------------
+RESOURCE TBUF32 r_ttgp_tbuf32_settings_file_name { buf = "Settings.dat"; }
+RESOURCE TBUF32 r_ttgp_tbuf32_settings_display_directory { buf = "TTGPSLogger"; }
+RESOURCE TBUF32 r_ttgp_tbuf32_settings_nmea_ext { buf = "nmea"; }
+RESOURCE TBUF32 r_ttgp_tbuf32_settings_gpx_ext { buf = "gpx"; }
+RESOURCE TBUF32 r_ttgp_tbuf32_settings_kml_ext { buf = "kml"; }
+
+// -----------------------------------------------------------------------------
+// Help(About) dialog resources.
+// -----------------------------------------------------------------------------
+RESOURCE TBUF32 r_ttgp_tbuf32_about_title { buf = qtn_dialog_about_title; }
+RESOURCE TBUF   r_ttgp_tbuf_about_text    { buf = "TTGPSLogger Version 0.4 beta\n \nCopyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>\nhttp://ttinputdiary.vox.com/"; }
+
+// -----------------------------------------------------------------------------
+// Help(Shortcuts) dialog resources.
+// -----------------------------------------------------------------------------
+RESOURCE TBUF32 r_ttgp_tbuf32_shortcuts_title { buf = qtn_dialog_shortcuts_title; }
+RESOURCE TBUF   r_ttgp_tbuf_shortcuts_text    { buf = qtn_dialog_shortcuts_text; }
+
+// -----------------------------------------------------------------------------
+// Command(Start, Start Now) dialog resources.
+// -----------------------------------------------------------------------------
+RESOURCE TBUF32 r_ttgp_tbuf32_dialog_menustart1_title_startnow { buf = qtn_dialog_menustart1_title_startnow; }
+RESOURCE TBUF32 r_ttgp_tbuf32_dialog_menustart1_title_startafter { buf = qtn_dialog_menustart1_title_startafter; }
+RESOURCE ARRAY r_ttgp_array_dialog_menustart1
+    {
+    items =
+        {
+        LBUF {txt = qtn_command_main_start_nmea; },
+        LBUF {txt = qtn_command_main_start_gpx; },
+        LBUF {txt = qtn_command_main_start_kml; }
+        };
+    }
+
+// -----------------------------------------------------------------------------
+// Shortcut('3' Key) dialog resources.
+// -----------------------------------------------------------------------------
+RESOURCE TBUF32 r_ttgp_tbuf32_dialog_pausestop_title { buf = qtn_dialog_pausestop_title; }
+RESOURCE TBUF32 r_ttgp_tbuf32_dialog_resumestop_title { buf = qtn_dialog_resumestop_title; }
+RESOURCE ARRAY r_ttgp_array_dialog_pausestop
+    {
+    items =
+        {
+        LBUF {txt = qtn_command_main_pause; },
+        LBUF {txt = qtn_command_main_stop; }
+        };
+    }
+RESOURCE ARRAY r_ttgp_array_dialog_resumestop
+    {
+    items =
+        {
+        LBUF {txt = qtn_command_main_resume; },
+        LBUF {txt = qtn_command_main_stop; }
+        };
+    }
+
+// -----------------------------------------------------------------------------
+// Shortcut('#' Key) dialog resources.
+// -----------------------------------------------------------------------------
+RESOURCE TBUF32 r_ttgp_tbuf32_dialog_tool_title { buf = qtn_dialog_tool_title; }
+RESOURCE ARRAY r_ttgp_array_dialog_tool_v32
+    {
+    items =
+        {
+        LBUF {txt = qtn_command_main_tool_satellite; },
+        LBUF {txt = qtn_command_main_tool_gpsstatus; },
+        LBUF {txt = qtn_command_main_tool_nmeaviewer; }
+        };
+    }
+RESOURCE ARRAY r_ttgp_array_dialog_tool_v31
+    {
+    items =
+        {
+        LBUF {txt = qtn_command_main_tool_gpsstatus; },
+        LBUF {txt = qtn_command_main_tool_nmeaviewer; }
+        };
+    }
+
+// -----------------------------------------------------------------------------
+// Command(Start) dialog resources.
+// -----------------------------------------------------------------------------
+RESOURCE DIALOG r_ttgp_dialog_menustart2
+    {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_OK_CANCEL__OK;
+    items =
+        {
+        DLG_LINE
+            {
+            type = EAknCtMultilineQuery;
+            id = EMultilineFirstLine;
+            control = AVKON_DATA_QUERY
+                {
+                layout = EMultiDataFirstDateEd;
+                label = qtn_dialog_menustart2_label_startdate;
+                control = DATE_EDITOR
+                    {
+                    minDate = DATE
+                        {
+                        year = 2001;
+                        };
+                    maxDate = DATE
+                        {
+                        year = 2099;
+                        };
+                    flags = 0;
+                    };
+                };
+            },
+        DLG_LINE
+            {
+            type = EAknCtMultilineQuery;
+            id = EMultilineSecondLine;
+            control = AVKON_DATA_QUERY
+                {
+                layout = EMultiDataSecondTimeEd;
+                label = qtn_dialog_menustart2_label_starttime;
+                control = TIME_EDITOR
+                    {
+                    minTime = TIME
+                        {
+                        hour = 0;
+                        minute = 0;
+                        second = 0;
+                        };
+                    maxTime = TIME
+                        {
+                        hour = 23;
+                        minute = 59;
+                        second = 59;
+                        };
+                    flags = EEikTimeWithoutSecondsField | EEikTimeForce24HourFormat;
+                    };
+                };
+            }
+        };
+    }
+
+// -----------------------------------------------------------------------------
+// Common dialog(List Query) resources.
+// -----------------------------------------------------------------------------
+RESOURCE AVKON_LIST_QUERY r_ttgp_dialog_listquery
+    {
+    flags = EGeneralQueryFlags;
+    softkeys = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT;
+    items =
+        {
+        AVKON_LIST_QUERY_DLG_LINE 
+            {
+            type = EAknCtListQueryControl;
+            control = AVKON_LIST_QUERY_CONTROL
+                {
+                listtype = EAknCtSinglePopupMenuListBox;
+                heading = "dummy";
+                listbox = AVKON_LIST_QUERY_LIST
+                	{
+                	//
+                	};
+                };
+            }
+        };
+    }
+
+// -----------------------------------------------------------------------------
+// Common dialog(Message Query) resources.
+// -----------------------------------------------------------------------------
+RESOURCE DIALOG r_ttgp_dialog_messagequery_ok
+	{
+	flags = EGeneralQueryFlags | EEikDialogFlagNoBorder | EEikDialogFlagNoShadow;
+	buttons = R_AVKON_SOFTKEYS_OK_EMPTY__OK;
+	items =
+		{
+		DLG_LINE 
+			{
+			type = EAknCtPopupHeadingPane;
+			id = EAknMessageQueryHeaderId;
+			itemflags = EEikDlgItemNonFocusing;
+			control = AVKON_HEADING
+				{
+				};
+			},
+		DLG_LINE
+			{
+			type = EAknCtMessageQuery;
+			id = EAknMessageQueryContentId;
+			control = AVKON_MESSAGE_QUERY
+				{
+				};
+			}
+		};
+	}
+
+// -----------------------------------------------------------------------------
+// Common dialog(Query) resources.
+// -----------------------------------------------------------------------------
+RESOURCE DIALOG r_ttgp_dialog_query_notitle_yesno
+    {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_YES_NO;
+    items =
+        {
+        DLG_LINE
+            {
+            type = EAknCtQuery;
+            id = EGeneralQuery;
+            control = AVKON_CONFIRMATION_QUERY
+                {
+                layout = EConfirmationQueryLayout;
+                animation = R_QGN_NOTE_INFO_ANIM;
+                };
+            }
+        };
+    }
+
+// -----------------------------------------------------------------------------
+//  Message resources.
+// -----------------------------------------------------------------------------
+RESOURCE TBUF r_ttgp_tbuf_msg_start_error1 { buf = qtn_msg_start_error1; }
+RESOURCE TBUF r_ttgp_tbuf_msg_record_success { buf = qtn_msg_record_success; }
+RESOURCE TBUF r_ttgp_tbuf_msg_record_fail1 { buf = qtn_msg_record_fail1; }
+RESOURCE TBUF r_ttgp_tbuf_msg_record_fail2 { buf = qtn_msg_record_fail2; }
+RESOURCE TBUF r_ttgp_tbuf_msg_lbs_error1 { buf = qtn_msg_lbs_error1; }
+RESOURCE TBUF r_ttgp_tbuf_msg_lbs_error2 { buf = qtn_msg_lbs_error2; }
+RESOURCE TBUF r_ttgp_tbuf_msg_positioning_method1 { buf = qtn_msg_positioning_method1; }
+RESOURCE TBUF r_ttgp_tbuf_msg_positioning_method2 { buf = qtn_msg_positioning_method2; }
+RESOURCE TBUF r_ttgp_tbuf_msg_copy_clipboard { buf = qtn_msg_copy_clipboard; }
+
+#include "TTGPSLoggerS60v5x.rssi"
