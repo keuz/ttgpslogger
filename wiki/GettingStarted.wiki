@@ -22,3 +22,4 @@ It confirms the operation with the following mobile devices like this software n
    Capability needed in the signature process is only "Location".
  # Please uninstall it absolutely if the previous version is installed in a mobile device.
  # Please install signed sis file in a mobile device. 
+ # In the setting of "Positioning Method", please select only either "Bluetooth GPS", "Assisted GPS" or "Integrated GPS". The tracking log cannot be output in "Network Based".
