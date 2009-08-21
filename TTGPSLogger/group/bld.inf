@@ -1,0 +1,21 @@
+/*
+============================================================================
+ Name		: bld.inf
+ Author	  : TTInput
+ Copyright   : Your copyright notice
+ Description : This file provides the information required for building the
+				whole of a TTGPSLogger.
+============================================================================
+*/
+
+
+PRJ_PLATFORMS
+WINSCW ARMV5 GCCE
+
+PRJ_MMPFILES
+
+gnumakefile icons_scalable_dc.mk
+
+
+TTGPSLogger.mmp
+
