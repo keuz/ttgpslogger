@@ -12,7 +12,7 @@ It confirms the operation with the following mobile devices like this software n
  * Nokia N79(Symbian S60 3rd Edition FP2) and Built-in GPS
  * Nokia N79(Symbian S60 3rd Edition FP2) and Bluetooth GPS(Nokia LD-3W)
 
-(In Symbian S60 5rd Edition, it confirms the operation only on the emulator.)
+(In Symbian S60 5th Edition, it confirms the operation only on the emulator.)
 
 ===How to install===
 
