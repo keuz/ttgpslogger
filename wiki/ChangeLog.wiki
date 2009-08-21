@@ -4,17 +4,17 @@
  * adding the record item of the KML format.("name", "description")
 
 ===Version 0.3 beta(2009/06/13):===
-* adding the shortcut keys, the help command of it.
-* adding the shortcut buttons.(for S60 5th touch screen devices)
-* adding the settings item.("Shortcut keys", etc.)
-* adding "Satellite Status" command.(for S60 3th FP2 and S60 5th devices)
+ * adding the shortcut keys, the help command of it.
+ * adding the shortcut buttons.(for S60 5th touch screen devices)
+ * adding the settings item.("Shortcut keys", etc.)
+ * adding "Satellite Status" command.(for S60 3th FP2 and S60 5th devices)
 
 ===Version 0.2 beta(2009/05/03):===
-* adding NMEA format as a GPS tracking format.(Only GPX and KML format : in the previous version.)
-* adding the record item of the GPX format.("&lt;course&gt;", "&lt;sat&gt;", etc.)
-* adding the screen display item.("DOP", "Sat.Num.", etc.)
-* adding the settings item.("Positioning Method", etc.)
-* adding "Start" Command(time specified beginning).
+ * adding NMEA format as a GPS tracking format.(Only GPX and KML format : in the previous version.)
+ * adding the record item of the GPX format.("&lt;course&gt;", "&lt;sat&gt;", etc.)
+ * adding the screen display item.("DOP", "Sat.Num.", etc.)
+ * adding the settings item.("Positioning Method", etc.)
+ * adding "Start" Command(time specified beginning).
 
 ===Version 0.1 beta(2009/04/01):===
-* Initial version.
+ * Initial version.
