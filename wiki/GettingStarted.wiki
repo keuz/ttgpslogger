@@ -2,15 +2,16 @@
 ===System Requirement===
 
 It is assumed to this software to operate with the following mobile device.
- * Symbian S60 3rd Edition FP1(Nokia N82,N95,E71,E90, etc.)
- * Symbian S60 3rd Edition FP2(Nokia N78,E75, etc.)
- * Symbian S60 5th Edition(Nokia 5800XpressMusic, etc.)
+ * Symbian S60 3rd Edition FP1(Nokia N82,N95,E71,E90 etc.)
+ * Symbian S60 3rd Edition FP2(Nokia N78,N79,N86,E52,E75 etc.)
+ * Symbian S60 5th Edition(Nokia 5800XpressMusic,N97 etc.)
 
 It confirms the operation with the following mobile devices like this software now.
  * Nokia N82(Symbian S60 3rd Edition FP1) and Built-in GPS
  * Nokia N82(Symbian S60 3rd Edition FP1) and Bluetooth GPS(Nokia LD-3W)
  * Nokia N79(Symbian S60 3rd Edition FP2) and Built-in GPS
  * Nokia N79(Symbian S60 3rd Edition FP2) and Bluetooth GPS(Nokia LD-3W)
+
 (In Symbian S60 5rd Edition, it confirms the operation only on the emulator.)
 
 ===How to install===
