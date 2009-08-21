@@ -4,4 +4,4 @@
    Please use and search for the Web site of Google about details of the signature method.<br>
    Capability needed in the signature process is only "Location".
  # Please uninstall it absolutely if the previous version is installed in a mobile device.
- # Please install signed TTGPSLogger.sis in a mobile device. 
+ # Please install signed sis file in a mobile device. 
