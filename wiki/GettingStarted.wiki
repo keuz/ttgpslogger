@@ -20,4 +20,14 @@ It confirms the operation with the following mobile devices like this software n
  # Please sign sis file with [https://www.symbiansigned.com/app/page/public/openSignedOnline.do Open Signed Online].
  # Please uninstall it absolutely if the previous version is installed in a mobile device.
  # Please install signed sis file in a mobile device. 
+
+===How to use===
+
  # In the setting of "Positioning Method", please select only either "Bluetooth GPS", "Assisted GPS" or "Integrated GPS". The tracking log cannot be output in "Network Based".
+ # The GPS logging can be begun by "Start" or "Start Now" commands. 
+ # The GPS logging can be paused by "Pause" command, and it can be resumed by "Resumed" command.
+ # The GPS logging can be stopped by "Stop" command. 
+ # The GPS tracking log file is generated to either of the following folders. It is possible to switch by the setting. 
+  * C:(Built-in memory)\Data\Others\TTGPSLogger
+  * E:(Memory Card)\Data\Others\TTGPSLogger
+ 
