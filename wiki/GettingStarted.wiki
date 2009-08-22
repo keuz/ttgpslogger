@@ -17,9 +17,7 @@ It confirms the operation with the following mobile devices like this software n
 ===How to install===
 
  # Please download sis file of the latest version from [http://code.google.com/p/ttgpslogger/downloads/list Downloads].
- # Please sign sis file with [https://www.symbiansigned.com/app/page/public/openSignedOnline.do Open Signed Online].<br>
-   Please use and search for the Web site of Google about details of the signature method.<br>
-   Capability needed in the signature process is only "Location".
+ # Please sign sis file with [https://www.symbiansigned.com/app/page/public/openSignedOnline.do Open Signed Online].
  # Please uninstall it absolutely if the previous version is installed in a mobile device.
  # Please install signed sis file in a mobile device. 
  # In the setting of "Positioning Method", please select only either "Bluetooth GPS", "Assisted GPS" or "Integrated GPS". The tracking log cannot be output in "Network Based".
