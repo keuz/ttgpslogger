@@ -27,7 +27,7 @@ It confirms the operation with the following mobile devices like this software n
  # The GPS logging can be begun by "Start" or "Start Now" commands. 
  # The GPS logging can be paused by "Pause" command, and it can be resumed by "Resumed" command.
  # The GPS logging can be stopped by "Stop" command. 
- # The GPS tracking log file is generated to either of the following folders. It is possible to switch by the setting. 
+ # The GPS tracking log file is generated to either of the following folders. It is possible to switch by "Settings" command. 
   * C:(Built-in memory)\Data\Others\TTGPSLogger
   * E:(Memory Card)\Data\Others\TTGPSLogger
  
