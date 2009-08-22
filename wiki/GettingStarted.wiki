@@ -26,7 +26,7 @@ It confirms the operation with the following mobile devices like this software n
  # In the setting of "Positioning Method", please select only either "Bluetooth GPS", "Assisted GPS" or "Integrated GPS". The tracking log cannot be output in "Network Based".
  # By "Start" or "Start Now" commands, the GPS logging can be begun. 
  # "Pause" command can pause the GPS logging, and "Resume" command can resume it.
- # "Stop" command can stop the GPS logging. The GPS tracking log file is generated to either of the following folders. It is possible to switch by "Settings" command. 
+ # "Stop" command can stop the GPS logging. The GPS tracking log file is generated to either of the following folders. By "Settings" command, it is possible to switch the folder. 
   * C:(Built-in memory)\Data\Others\TTGPSLogger
   * E:(Memory Card)\Data\Others\TTGPSLogger
  
