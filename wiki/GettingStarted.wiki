@@ -4,7 +4,7 @@
 It is assumed to this software to operate with the following mobile device.
  * Symbian S60 3rd Edition FP1(Nokia N82,N95,E71,E90 etc.)
  * Symbian S60 3rd Edition FP2(Nokia N78,N79,N86,E52,E75,Samsung i8510, etc.)
- * Symbian S60 5th Edition(Nokia 5800XpressMusic,N97Samsung i8910, etc.)
+ * Symbian S60 5th Edition(Nokia 5800XpressMusic,N97,Samsung i8910, etc.)
 
 It confirms the operation with the following mobile devices like this software now.
  * Nokia N82(Symbian S60 3rd Edition FP1) and Built-in GPS
