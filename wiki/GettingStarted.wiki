@@ -23,8 +23,7 @@ It confirms the operation with the following mobile devices like this software n
 
 ===How to use===
 
- # In the setting of "Positioning Method", please select only either "Bluetooth GPS", "Assisted GPS" or "Integrated GPS". The tracking log cannot be output in "Network Based".
-[http://ttgpslogger.googlecode.com/svn/images/Scr000004.jpg]
+ # In the setting of "Positioning Method", please select only either "Bluetooth GPS", "Assisted GPS" or "Integrated GPS". The tracking log cannot be output in "Network Based".[http://ttgpslogger.googlecode.com/svn/images/Scr000004.jpg]
  # By "Start" or "Start Now" commands, the GPS logging can be begun. 
 [http://ttgpslogger.googlecode.com/svn/images/Scr000013.jpg]
 [http://ttgpslogger.googlecode.com/svn/images/Scr000014.jpg]
