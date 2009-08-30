@@ -1,17 +1,25 @@
 ===Commands===
   * "Start Now" - "NMEA"/"GPX"/"KML"
-  It starts the GPS logging immediately. the navigation label changes into "Recording".
+  It starts the GPS logging immediately. The navigation label changes into "Recording".
   * "Start" - "NMEA"/"GPX"/"KML"
   It starts the GPS logging at the input "Start Date/Time". <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000013.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000014.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000015.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000016.jpg]</p>
   * "Record"
   * "Pause"
+  It pauses the GPS logging. The navigation label changes into "Pausing".
   * "Resume"
+  It resumes the GPS logging. The navigation label changes into "Recording".
   * "Stop"
-  * "Tool" - "Satellite Status"
+  It stops the GPS logging. The navigation label no longer appears.
+  * "Tool" - "Satellite Status"(only since S60 3rd FP2)
+  It displays GPS status from LBS(Location Based Services).  <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000024.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000025.jpg]</p>
   * "Tool" - "GPS Status"
+  It displays GPS status from LBS(Location Based Services). <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000026.jpg]</p>
   * "Tool" - "NMEA Viewer"
+  It displays NMEA 0183 sentences acquired from LBS(Location Based Services). <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000027.jpg]</p>
   * "Help" - "About"
+  It displays "About Dialog" of this software.
   * "Help" - "Shortcuts"
+  It displays the list of Keyboard shortcuts. 
   * "Exit"
 
 ===Keyboard shortcuts(Numeric)===
