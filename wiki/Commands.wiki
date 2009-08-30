@@ -4,7 +4,7 @@
   * "Start" - "NMEA"/"GPX"/"KML"
   It begins the GPS logging at GPS Timestamp(not Phone Timestamp) input by the dialog of "Start Date/Time". When the GPS Logging is begun, the navigation label changes from "Waiting" into "Recording". <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000013.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000014.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000015.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000016.jpg]</p>
   * "Record"
-  It pauses the GPS logging. The navigation label changes from "Recording" into "Pausing". <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000028.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000030.jpg]</p>
+  It records the present location regardless of recording settings("Intervals", "Horizontal diatance"). When the present location is invalid, it is not possible to record. <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000028.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000030.jpg]</p>
   * "Pause"
   It pauses the GPS logging. The navigation label changes from "Recording" into "Pausing". <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000017.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000018.jpg]</p>
   * "Resume"
