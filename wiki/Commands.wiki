@@ -1,8 +1,10 @@
 ===Commands===
-  * <a name="StartNow">Start Now
-  * <a name="StartNow">Start
+  * <a name="StartNow" />Start Now
+    It starts GPS Logging immediately.
+  * <a name="Start" />Start
+    It starts GPS Logging immediately.
 
-===Shortcuts(Numeric)===
+===Keyboard shortcuts(Numeric)===
   * 1 - [Commands#StartNow Start Now(NMEA/GPX/KML)]
   * 2 - [Commands#Start Start Now(NMEA/GPX/KML)]
   * 3 - Pause/Resume/Stop
@@ -10,5 +12,5 @@
   * 0 - Record
   * # - Tool
 
-===Shortcuts(QWERT)===
+===Keyboard shortcuts(QWERT)===
   * 
