@@ -1,17 +1,26 @@
 ===Commands===
-#StartNow
   * "Start Now" - "NMEA"/"GPX"/"KML"
-  It starts GPS Logging immediately.
-  * "Start"
-It starts GPS Logging immediately.
+  It starts the GPS logging immediately. the navigation label changes into "Recording".
+  * "Start" - "NMEA"/"GPX"/"KML"
+  It starts the GPS logging at the input "Start Date/Time". 
+  * "Record"
+  * "Pause"
+  * "Resume"
+  * "Stop"
+  * "Tool" - "Satellite Status"
+  * "Tool" - "GPS Status"
+  * "Tool" - "NMEA Viewer"
+  * "Help" - "About"
+  * "Help" - "Shortcuts"
+  * "Exit"
 
 ===Keyboard shortcuts(Numeric)===
-  * 1 - [Commands#StartNow Start Now(NMEA/GPX/KML)]
-  * 2 - [Commands#Start Start Now(NMEA/GPX/KML)]
-  * 3 - Pause/Resume/Stop
-  * *** - Lock keypad
-  * 0 - Record
-  * # - Tool
+  * 1 - "Start Now"(NMEA/GPX/KML)
+  * 2 - "Start"(NMEA/GPX/KML)
+  * 3 - "Pause"/"Resume"/"Stop"
+  * ** - Lock keypad
+  * 0 - "Record"
+  * # - "Tool"
 
 ===Keyboard shortcuts(QWERT)===
   * 
