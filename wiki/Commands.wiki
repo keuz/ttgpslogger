@@ -5,9 +5,9 @@
   It starts the GPS logging at the input "Start Date/Time". <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000013.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000014.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000015.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000016.jpg]</p>
   * "Record"
   * "Pause"
-  It pauses the GPS logging. The navigation label changes into "Pausing".
+  It pauses the GPS logging. The navigation label changes into "Pausing". <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000017.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000018.jpg]</p>
   * "Resume"
-  It resumes the GPS logging. The navigation label changes into "Recording".
+  It resumes the GPS logging. The navigation label changes into "Recording". <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000019.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000020.jpg]</p>
   * "Stop"
   It stops the GPS logging. The navigation label no longer appears.
   * "Tool" - "Satellite Status"(only since S60 3rd FP2)
