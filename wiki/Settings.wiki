@@ -2,14 +2,16 @@
 
 ===Display Tab===
   * "Measurement system"
-  "Metric"/"Imperial"
+  Select "Measurement system" for display notation. (either "Metric" or "Imperial", default "Metric")
   * "Coordinate format"
-  "DDD°MM'SS.SS"/"DDD°MM.MMMM"/"DDD.DDDDD°"
+  Select "Coordinate format" for display notation. (either "DDD°MM'SS.SS", "DDD°MM.MMMM" or "DDD.DDDDD°", default "DDD°MM'SS.SS")
   * "Items"
+  
   * "Shortcuts"
-  "Disabled"/"Enabled"
+  Select whether to use Keyboard shortcuts. (default "Enabled")
 ===Output Tab===
   * "Autostart"
+  Select whether to begin the GPS logging automatically when this software is begun. 
   "Disabled"/"NMEA"/"GPX"/"KML"
   * "Memory in use"
   * "Intervals"
