@@ -18,15 +18,16 @@
     * C:(Built-in memory)\Data\Others\TTGPSLogger
     * E:(Memory Card)\Data\Others\TTGPSLogger
   * "Intervals"
-  "none"/"1"/"5"/"10"/"15"/"20"/"30"/"60"
+  Select logging intervals by time.
   * "Horizontal distance"
-  "none"/"10"/"20"/"25"/"50"/"100"/"200"/"250"/"500"/"1000"
+  Select logging intervals by horizontal distance.
   * "Auto pause(H.Speed)(Speed)(H.Acc)(HDOP)(PDOP)"
+  
 ===NMEA Tab===
   * "File Name(Ext)"
   Input the extension name of the GPS tracking file(NMEA format).
   * "Sentences"
-  Select which Sentences to output to the file among NMEA 0183 Sentences acquired from LBS(Location Based Services)  ("GPGGA", "GPGLL", "GPGSA", etc.)
+  Select which Sentences to output to the file among NMEA 0183 Sentences acquired from LBS(Location Based Services). ("GPGGA", "GPGLL", "GPGSA", etc.)
 ===GPX Tab===
   * "File Name(Ext)"
   Input the extension name of the GPS tracking file(GPX format).
