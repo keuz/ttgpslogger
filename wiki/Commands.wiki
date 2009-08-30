@@ -1,0 +1,14 @@
+===Commands===
+  * Start Now
+  * Start
+
+===Shortcuts(Numeric)===
+  * 1 - Start Now(NMEA/GPX/KML)
+  * 2 - Start(NMEA/GPX/KML)
+  * 3 - Pause/Resume/Stop
+  * * - Lock keypad
+  * 0 - Record
+  * # - Tool
+
+===Shortcuts(QWERT)===
+  * 
