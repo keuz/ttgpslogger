@@ -20,7 +20,6 @@
   It displays "About Dialog" of this software.
   * "Help" - "Shortcuts"
   It displays the list of Keyboard shortcuts. 
-  * "Exit"
 
 ===Keyboard shortcuts(Numeric)===
   * 1 - "Start Now"(NMEA/GPX/KML)
@@ -31,4 +30,16 @@
   * # - "Tool"
 
 ===Keyboard shortcuts(QWERT)===
-  * 
+  * s - "Start Now"(NMEA/GPX/KML)/"Stop"
+  * S - "Start"(NMEA/GPX/KML)/"Stop"
+  * n - "Start Now"(NMEA)
+  * N - "Start"(NMEA)
+  * g - "Start Now"(GPX)
+  * G - "Start"(GPX)
+  * k - "Start Now"(KML)
+  * K - "Start"(KML)
+  * p,P - "Pause"
+  * r,R - "Resume"
+  * l,L - Lock keypad
+  * Space - "Record"
+  * t,T - "Tool"
