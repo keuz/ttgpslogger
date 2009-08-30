@@ -6,14 +6,17 @@
   * "Coordinate format"
   Select "Coordinate format" for display notation. (either "DDD°MM'SS.SS", "DDD°MM.MMMM" or "DDD.DDDDD°", default "DDD°MM'SS.SS")
   * "Items"
-  
+  Select the display items. ("Longitude", "Latitude", "Altitude", etc.)
   * "Shortcuts"
   Select whether to use Keyboard shortcuts. (default "Enabled")
+
 ===Output Tab===
   * "Autostart"
-  Select whether to begin the GPS logging automatically when this software is begun. 
-  "Disabled"/"NMEA"/"GPX"/"KML"
+  Select whether to begin the GPS logging automatically when this software is started.  (default "Disabled")
   * "Memory in use"
+  Select the memory with which the GPS tracking file is generated. The file is generated to either of the following folders. (default Built-in memory(C:))
+    - Built-in memory(C:)
+
   * "Intervals"
   "none"/"1"/"5"/"10"/"15"/"20"/"30"/"60"
   * "Horizontal distance"
