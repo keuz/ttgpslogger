@@ -9,7 +9,7 @@ It starts GPS Logging immediately.
   * 1 - [Commands#StartNow Start Now(NMEA/GPX/KML)]
   * 2 - [Commands#Start Start Now(NMEA/GPX/KML)]
   * 3 - Pause/Resume/Stop
-  * * - Lock keypad
+  * ** - Lock keypad
   * 0 - Record
   * # - Tool
 
