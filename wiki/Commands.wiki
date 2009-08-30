@@ -1,3 +1,5 @@
+#summary Commands and Shortcuts in this software.
+
 ===Commands===
   * "Start Now" - "NMEA"/"GPX"/"KML"
   It starts the GPS logging immediately. The navigation label changes into "Recording".
