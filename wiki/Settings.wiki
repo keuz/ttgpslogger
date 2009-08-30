@@ -22,7 +22,12 @@
   * "Horizontal distance"
   Select logging intervals by horizontal distance.
   * "Auto pause(H.Speed)(Speed)(H.Acc)(HDOP)(PDOP)"
-  
+  It is the function that pause/resume automatically corresponding to the following GPS parameter obtained from "LBS"(Location Based Services).
+    * H.Speed(Horizontal Speed)
+    * Speed
+    * H.Acc(Horizontal Accuracy)
+    * HDOP
+    * PDOP
 ===NMEA Tab===
   * "File Name(Ext)"
   Input the extension name of the GPS tracking file(NMEA format).
