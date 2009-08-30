@@ -1,4 +1,5 @@
 #summary Commands and Shortcuts in this software.
+#labels Featured
 
 ===Commands===
   * "Start Now" - "NMEA"/"GPX"/"KML"
