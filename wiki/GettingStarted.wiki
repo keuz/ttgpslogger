@@ -1,4 +1,6 @@
 #labels Featured
+How to install and use this software.
+
 ===System Requirement===
 
 It is assumed to this software to operate with the following mobile device.
