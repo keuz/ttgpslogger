@@ -1,8 +1,9 @@
 ===Commands===
-  * <a name="StartNow" />Start Now
-    It starts GPS Logging immediately.
-  * <a name="Start" />Start
-    It starts GPS Logging immediately.
+#StartNow
+  * "Start Now" - "NMEA"/"GPX"/"KML"
+It starts GPS Logging immediately.
+  * "Start"
+It starts GPS Logging immediately.
 
 ===Keyboard shortcuts(Numeric)===
   * 1 - [Commands#StartNow Start Now(NMEA/GPX/KML)]
