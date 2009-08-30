@@ -1,8 +1,6 @@
 ===Commands===
-[Commands#StartNow]
-  * Start Now
-[Commands#Start]
-  * Start
+  * <a name="StartNow">Start Now
+  * <a name="StartNow">Start
 
 ===Shortcuts(Numeric)===
   * 1 - [Commands#StartNow Start Now(NMEA/GPX/KML)]
