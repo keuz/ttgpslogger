@@ -1,0 +1,32 @@
+#summary One-sentence summary of this page.
+
+===Display Tab===
+  * "Measurement system"
+  "Metric"/"Imperial"
+  * "Coordinate format"
+  "DDD°MM'SS.SS"/"DDD°MM.MMMM"/"DDD.DDDDD°"
+  * "Items"
+  * "Shortcuts"
+  "Disabled"/"Enabled"
+===Output Tab===
+  * "Autostart"
+  "Disabled"/"NMEA"/"GPX"/"KML"
+  * "Memory in use"
+  * "Intervals"
+  "none"/"1"/"5"/"10"/"15"/"20"/"30"/"60"
+  * "Horizontal distance"
+  "none"/"10"/"20"/"25"/"50"/"100"/"200"/"250"/"500"/"1000"
+  * "Auto pause(H.Speed)(Speed)(H.Acc)(HDOP)(PDOP)"
+===NMEA Tab===
+  * "File Name(Ext)"
+  * "Sentences"
+  "GPGGA"/"GPGLL"/"GPGSA"/"GPGST"/"GPGSV"/"GPRMC"/"GPVTG"/"GPZDA"/"Other"
+===GPX Tab===
+  * "File Name(Ext)"
+  * "Tags"
+  "time/"/"ele"/"course"/"speed"/"fix"/"sat"/"hdop"/"vdop"/"pdop"
+===KML Tab===
+  * "File Name(Ext)"
+  * "Placemark(Name)"
+  "None"/"Point"/"TimeStamp(UTC)"/"TimeStamp(Local)"
+  * "Placemark(Description)"
