@@ -9,11 +9,11 @@
   * "Resume"
   It resumes the GPS logging. The navigation label changes into "Recording". <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000019.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000020.jpg]</p>
   * "Stop"
-  It stops the GPS logging. The navigation label no longer appears.
+  It stops the GPS logging. The navigation label no longer appears. <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000021.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000022.jpg]</p>
   * "Tool" - "Satellite Status"(only since S60 3rd FP2)
-  It displays GPS status from LBS(Location Based Services).  <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000024.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000025.jpg]</p>
+  It displays the position and the signal strength of GPS satellites acquired from LBS(Location Based Services).  <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000024.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000025.jpg]</p>
   * "Tool" - "GPS Status"
-  It displays GPS status from LBS(Location Based Services). <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000026.jpg]</p>
+  It displays GPS parameters acquired from LBS(Location Based Services). <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000026.jpg]</p>
   * "Tool" - "NMEA Viewer"
   It displays NMEA 0183 sentences acquired from LBS(Location Based Services). <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000027.jpg]</p>
   * "Help" - "About"
