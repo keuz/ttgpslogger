@@ -1,5 +1,5 @@
+#summary How to install and use this software.
 #labels Featured
-How to install and use this software.
 
 ===System Requirement===
 
