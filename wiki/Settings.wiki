@@ -31,11 +31,12 @@
   * "File Name(Ext)"
   Input the extension name of the GPS tracking file(GPX format).
   * "Tags"
-  "time/"/"ele"/"course"/"speed"/"fix"/"sat"/"hdop"/"vdop"/"pdop"
+  Select child elements of the {{{<trkpt>}}} element. ("time", "ele", "course", etc.)
+
 ===KML Tab===
   * "File Name(Ext)"
   Input the extension name of the GPS tracking file(KML format).
   * "Placemark(Name)"
-  Select the element's content of the {{{<Placemark>}}} - {{{<Name>}}} tag. (either "None", "Point", "TimeStamp(UTC)", or "TimeStamp(Local)")
+  Select the element's content of the {{{<Name>}}} tag, which is child element of the{{{<Placemark>}}} tag. (either "None", "Point", "TimeStamp(UTC)", or "TimeStamp(Local)". default "Point")
   * "Placemark(Description)"
-  Select the element's contents of the {{{<Placemark>}}} - {{{<Description>}}} tag.
+  Select the element's contents of the {{{<Description>}}} tag, which is child element of the {{{<Placemark>}}} tag.  ("Longitude", "Latitude", "Altitude", etc.)
