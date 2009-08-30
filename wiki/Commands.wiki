@@ -2,7 +2,7 @@
   * "Start Now" - "NMEA"/"GPX"/"KML"
   It starts the GPS logging immediately. the navigation label changes into "Recording".
   * "Start" - "NMEA"/"GPX"/"KML"
-  It starts the GPS logging at the input "Start Date/Time". 
+  It starts the GPS logging at the input "Start Date/Time". <p>[http://ttgpslogger.googlecode.com/svn/images/Scr000013.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000014.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000015.jpg] [http://ttgpslogger.googlecode.com/svn/images/Scr000016.jpg]</p>
   * "Record"
   * "Pause"
   * "Resume"
