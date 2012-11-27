@@ -3,8 +3,7 @@
  * 
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
- * 
- * Updated by amacri@tiscali.it
+ * Copyright (C) 2012 Amacri <amacri@tiscali.it>
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -20,9 +19,11 @@
  * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA 02111-1307 USA
  */
+#include <eikenv.h>
 #include <e32base.h>
 #include <e32std.h>
 #include <lbs.h>
+#include <TTGPSLogger.rsg>
 #include "TTGPSLoggerPositionData.h"
 
 CTTGPSLoggerPositionData::CTTGPSLoggerPositionData() :
@@ -88,6 +89,8 @@ void CTTGPSLoggerPositionData::SetPositionInfoL(TPositionModuleInfo aPositionMod
     {
     TBool flag(EFalse);
     TInt err(KErrNone);
+	TRealX realNaN;
+	realNaN.SetNaN();
     
     Init();
     iIsValid = ETrue;
@@ -97,31 +100,43 @@ void CTTGPSLoggerPositionData::SetPositionInfoL(TPositionModuleInfo aPositionMod
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldHorizontalSpeed, iHorizontalSpeed);
+        if (err != KErrNone)
+            realNaN.GetTReal(iHorizontalSpeed);
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldVerticalSpeed);
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldVerticalSpeed, iVerticalSpeed);
+        if ((err != KErrNone) || (iVerticalSpeed>500)) // Amacri
+            realNaN.GetTReal(iVerticalSpeed);
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldTrueCourse);
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldTrueCourse, iTrueCourse);
+        if (err != KErrNone)
+            realNaN.GetTReal(iTrueCourse);
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldMagneticCourse);
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldMagneticCourse, iMagneticCourse);
+        if (err != KErrNone)
+            realNaN.GetTReal(iMagneticCourse);
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldHeading);
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldHeading, iHeading);
+        if (err != KErrNone)
+            realNaN.GetTReal(iHeading);
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldMagneticHeading);
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldMagneticHeading, iMagneticHeading);
+        if (err != KErrNone)
+            realNaN.GetTReal(iMagneticHeading);
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldNMEASentences);
     if (flag)
@@ -152,46 +167,64 @@ void CTTGPSLoggerPositionData::SetPositionInfoL(TPositionModuleInfo aPositionMod
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldSatelliteNumInView, iSatelliteNumInView);
+        if (err != KErrNone)
+        	iSatelliteNumInView=0;
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldSatelliteNumUsed);
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldSatelliteNumUsed, iSatelliteNumUsed);
+        if (err != KErrNone)
+        	iSatelliteNumUsed=0;
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldSatelliteTime);
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldSatelliteTime, iSatelliteTime);
+        if (err != KErrNone)
+        	iSatelliteTime=0;
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldSatelliteHorizontalDoP);
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldSatelliteHorizontalDoP, iSatelliteHorizontalDoP);
+        if (err != KErrNone)
+        	iSatelliteHorizontalDoP=0;
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldSatelliteVerticalDoP);
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldSatelliteVerticalDoP, iSatelliteVerticalDoP);
+        if (err != KErrNone)
+			realNaN.GetTReal(iSatelliteVerticalDoP);
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldSatelliteTimeDoP);
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldSatelliteTimeDoP, iSatelliteTimeDoP);
+        if (err != KErrNone)
+			realNaN.GetTReal(iSatelliteTimeDoP);
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldSatellitePositionDoP);
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldSatellitePositionDoP, iSatellitePositionDoP);
+        if (err != KErrNone)
+			realNaN.GetTReal(iSatellitePositionDoP);
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldSatelliteSeaLevelAltitude);
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldSatelliteSeaLevelAltitude, iSatelliteSeaLevelAltitude);
+        if (err != KErrNone)
+			realNaN.GetTReal(iSatelliteSeaLevelAltitude);
         }
     flag = aPositionInfo->IsFieldAvailable(EPositionFieldSatelliteGeoidalSeparation);
     if (flag)
         {
         err = aPositionInfo->GetValue(EPositionFieldSatelliteGeoidalSeparation, iSatelliteGeoidalSeparation);
+        if (err != KErrNone)
+			realNaN.GetTReal(iSatelliteGeoidalSeparation);
         }
     }
 

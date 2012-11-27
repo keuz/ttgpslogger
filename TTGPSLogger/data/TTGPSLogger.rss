@@ -1651,4 +1651,21 @@ RESOURCE TBUF r_ttgp_tbuf_msg_path { buf = qtn_msg_path; }
 RESOURCE TBUF r_ttgp_tbuf_msg_free { buf = qtn_msg_free; }
 RESOURCE TBUF r_ttgp_tbuf_msg_label { buf = qtn_msg_label; }
 
+// -----------------------------------------------------------------------------
+//  Test resources.
+// -----------------------------------------------------------------------------
+RESOURCE TBUF r_ttgp_tbuf_test_1_real { buf = "%.2f"; }
+RESOURCE TBUF r_ttgp_tbuf_test_2_real { buf = "%.2f %.2f"; }
+RESOURCE TBUF r_ttgp_tbuf_test_3_real { buf = "%.2f %.2f %.2f"; }
+RESOURCE TBUF r_ttgp_tbuf_test_4_real { buf = "%.2f %.2f %.2f %.2f"; }
+RESOURCE TBUF r_ttgp_tbuf_test_1_long { buf = "%ld"; }
+RESOURCE TBUF r_ttgp_tbuf_test_2_long { buf = "%ld %ld"; }
+RESOURCE TBUF r_ttgp_tbuf_test_3_long { buf = "%ld %ld %ld"; }
+RESOURCE TBUF r_ttgp_tbuf_test_4_long { buf = "%ld %ld %ld %ld"; }
+RESOURCE TBUF r_ttgp_tbuf_test_1_int { buf = "%d"; }
+RESOURCE TBUF r_ttgp_tbuf_test_1b_2i { buf = "%S %d %d"; }
+RESOURCE TBUF r_ttgp_tbuf_test_2_int { buf = "%d %d"; }
+RESOURCE TBUF r_ttgp_tbuf_test_4_int { buf = "%d %d %d %d"; }
+RESOURCE TBUF r_ttgp_tbuf_test_1_buf8 { buf = "%s"; }
+
 #include "TTGPSLoggerS60v5x.rssi"

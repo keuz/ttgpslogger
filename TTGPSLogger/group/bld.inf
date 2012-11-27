@@ -18,4 +18,6 @@ gnumakefile icons_scalable_dc.mk
 
 
 TTGPSLogger.mmp
+../TTGPSLogger0.5.3/group/TTGPSLogger.mmp
+gnumakefile ../TTGPSLogger0.5.3/group/Icons_scalable_dc.mk
 
