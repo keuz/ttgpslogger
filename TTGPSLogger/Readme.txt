@@ -1,4 +1,8 @@
-TTGPSLogger Version 0.5.3 (2012-11-11)
+TTGPSLogger Version 0.5.4 (2012-11-12)
+
+New fix provided by drop 0.5.4 (2012-11-12): this version prevents collecting invalid Vertical Speeds (e.g., reporting about 654 - 656 m/s) that might be due to a possible Symbian (or phone) issue; vertical speeds above 500 m/s are not processed.
+
+_____________________________________________________________________________
 
 New feature provided by drop 0.5.3 (2012-11-11): this version allows changing the default positioning method set in the phone configuration.
 
