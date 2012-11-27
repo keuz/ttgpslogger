@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -64,6 +64,7 @@ public:
     static void SetNaN(TReal64& aValue);
     static TInt ConvertTDes8ToTDes(TDes& aBuf, const TDesC8& aBuf8);
     static TInt ConvertTDesToTDes8(TDes8& aBuf8, const TDesC& aBuf);
+    static TBool CheckDiskL(TInt aDNum, TBool aFull);
 private:
     static void AppendFormatCoordinate(TDes& aBuf, TReal64 aCoordinate);
     static void AppendFormatFeetsMetres(TDes& aBuf, TReal32 aValue);

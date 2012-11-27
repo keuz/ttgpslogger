@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -45,25 +45,26 @@ CTTGPSLoggerPositionRequester::CTTGPSLoggerPositionRequester() :
 	{
 	}
 
-CTTGPSLoggerPositionRequester* CTTGPSLoggerPositionRequester::NewLC()
+CTTGPSLoggerPositionRequester* CTTGPSLoggerPositionRequester::NewLC(TInt PositioningMethod)
 	{
 	CTTGPSLoggerPositionRequester* self =
 			new (ELeave) CTTGPSLoggerPositionRequester();
 	CleanupStack::PushL(self);
-	self->ConstructL();
+	self->ConstructL(PositioningMethod);
 	return self;
 	}
 
-CTTGPSLoggerPositionRequester* CTTGPSLoggerPositionRequester::NewL()
+CTTGPSLoggerPositionRequester* CTTGPSLoggerPositionRequester::NewL(TInt PositioningMethod)
 	{
 	CTTGPSLoggerPositionRequester* self =
-			CTTGPSLoggerPositionRequester::NewLC();
+			CTTGPSLoggerPositionRequester::NewLC(PositioningMethod);
 	CleanupStack::Pop(); // self;
 	return self;
 	}
 
-void CTTGPSLoggerPositionRequester::ConstructL()
+void CTTGPSLoggerPositionRequester::ConstructL(TInt PositioningMethod)
 	{
+    iPositioningMethod=PositioningMethod;
 	//RDebug::Print(_L("%d\n"), __LINE__);
 	User::LeaveIfError(iPositionServer.Connect());
 	//RDebug::Print(_L("%d\n"), __LINE__);
@@ -120,7 +121,18 @@ void CTTGPSLoggerPositionRequester::StartL()
 	{
 	Stop();
 	//RDebug::Print(_L("%d\n"), __LINE__);
-	User::LeaveIfError(iPositioner.Open(iPositionServer));
+
+#ifdef POSMETH
+	TPositionModuleInfo info;
+	if ( (iPositioningMethod>0) &&
+				((iPositionServer.GetModuleInfoByIndex(iPositioningMethod-1,info) == KErrNone) && (info.IsAvailable())) )
+			{
+			User::LeaveIfError(iPositioner.Open(iPositionServer, info.ModuleId()));
+			}
+	else
+#endif
+		User::LeaveIfError(iPositioner.Open(iPositionServer));
+	
 	//RDebug::Print(_L("%d\n"), __LINE__);
 	User::LeaveIfError(iPositioner.SetRequestor(CRequestor::ERequestorService, CRequestor::EFormatApplication, KRequestor));
 	//RDebug::Print(_L("%d\n"), __LINE__);

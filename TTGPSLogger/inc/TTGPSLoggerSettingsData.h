@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -180,8 +180,10 @@ public:
         {
         ETTGPSLoggerSettingsGPXTagsIndexTime = 0,
         ETTGPSLoggerSettingsGPXTagsIndexEle,
+        ETTGPSLoggerSettingsGPXTagsIndexSeaLevel,
         ETTGPSLoggerSettingsGPXTagsIndexCourse,
         ETTGPSLoggerSettingsGPXTagsIndexSpeed,
+        ETTGPSLoggerSettingsGPXTagsIndexUseVSpeed,
         ETTGPSLoggerSettingsGPXTagsIndexFix,
         ETTGPSLoggerSettingsGPXTagsIndexSat,
         ETTGPSLoggerSettingsGPXTagsIndexHdop,
@@ -193,8 +195,10 @@ public:
         {
         ETTGPSLoggerSettingsGPXTagsInitialTime = ETrue,
         ETTGPSLoggerSettingsGPXTagsInitialEle = ETrue,
+        ETTGPSLoggerSettingsGPXTagsInitialSeaAlt = ETrue,
         ETTGPSLoggerSettingsGPXTagsInitialCourse = ETrue,
         ETTGPSLoggerSettingsGPXTagsInitialSpeed = ETrue,
+        ETTGPSLoggerSettingsGPXTagsInitialUseVSpeed = EFalse,
         ETTGPSLoggerSettingsGPXTagsInitialFix = ETrue,
         ETTGPSLoggerSettingsGPXTagsInitialSat = ETrue,
         ETTGPSLoggerSettingsGPXTagsInitialHdop = ETrue,
@@ -265,8 +269,14 @@ public:
     TInt& GetDisplayCoordinateFormat();
     CArrayFix<TInt>& GetDisplayItems();
     TBool& GetDisplayShortcuts();
+#ifdef DSYSTEM
+    TBool& GetGeneralSystem();
+#endif
+    TInt& GetPositioningMethod();
+    TBool& GetGpxSegment();
     TInt& GetOutputAutostart();
-    CAknMemorySelectionDialog::TMemory& GetOutputMemory();
+    //CAknMemorySelectionDialog::TMemory& GetOutputMemory();
+    TInt& GetOutputMemory();
     TDes& GetOutputDirectory();
     TInt& GetOutputIntervals();
     TInt& GetOutputDistance();
@@ -279,6 +289,10 @@ public:
     CArrayFix<TInt>& GetNMEASentences();
     TDes& GetGPXExt();
     CArrayFix<TInt>& GetGPXTags();
+    TDes& GetGPXAuthor();
+    TDes& GetGPXEmail();
+    TDes& GetGPXUrl();
+    TDes& GetGPXUrlName();
     TDes& GetKMLExt();
     TInt& GetKMLPmName();
     CArrayFix<TInt>& GetKMLPmDescription();
@@ -286,6 +300,11 @@ public:
     TInt DisplayCoordinateFormat() const;
     TInt DisplayItems(TInt aIndex) const;
     TBool DisplayShortcuts() const;
+#ifdef DSYSTEM
+    TBool GeneralSystem() const;
+#endif
+    TInt PositioningMethod() const;
+    TBool GpxSegment() const;
     TInt OutputAutostart() const;
     TInt OutputIntervals() const;
     TInt OutputDistance() const;
@@ -298,6 +317,10 @@ public:
     const TDesC& NMEAExt() const;
     TInt NMEASentences(TInt aIndex) const;
     const TDesC& GPXExt() const;
+    const TDesC& GPXAuthor() const;
+    const TDesC& GPXEmail() const;
+    const TDesC& GPXUrl() const;
+    const TDesC& GPXUrlName() const;
     TInt GPXTags(TInt aIndex) const;
     const TDesC& KMLExt() const;
     TInt KMLPmName() const;
@@ -309,8 +332,14 @@ private:
     TInt iDisplayCoordinateFormat;
 	CArrayFixFlat<TInt> iDisplayItems;
     TBool iDisplayShortcuts;
+#ifdef DSYSTEM
+    TBool iGeneralSystem;
+#endif
+    TInt iPositioningMethod;
+    TBool iGpxSegment;
     TInt iOutputAutostart;
-	CAknMemorySelectionDialog::TMemory iOutputMemory;
+//	CAknMemorySelectionDialog::TMemory iOutputMemory;
+    TInt iOutputMemory;
     RBuf iOutputDirectory;
     TInt iOutputIntervals;
     TInt iOutputDistance;
@@ -322,6 +351,10 @@ private:
     RBuf iNMEAExt;
 	CArrayFixFlat<TInt> iNMEASentences;
     RBuf iGPXExt;
+    RBuf iGPXAuthor;
+    RBuf iGPXEmail;
+    RBuf iGPXUrl;
+    RBuf iGPXUrlName;
 	CArrayFixFlat<TInt> iGPXTags;
     RBuf iKMLExt;
     TInt iKMLPmName;

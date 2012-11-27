@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -22,6 +22,10 @@
  */
 #ifndef TTGPSLOGGERPOSITIONRECORDER_H
 #define TTGPSLOGGERPOSITIONRECORDER_H
+
+#ifdef USELIGHTS
+#include <HWRMLight.h> // Link against HWRMLightClient.lib.
+#endif
 
 class CTTGPSLoggerEngine;
 class CTTGPSLoggerPositionData;
@@ -69,6 +73,7 @@ public:
     void RecordL();
     void PauseL();
     void ResumeL();
+    void SyncTimeL();
     void StopL();
     
 private:
@@ -103,6 +108,10 @@ private:
     HBufC* iMsgRecordSuccess;
     HBufC* iMsgRecordFail1;
     HBufC* iMsgRecordFail2;
+    HBufC* iMsgSatTime;
+#ifdef USELIGHTS
+    CHWRMLight* iLight;
+#endif
 };
 
 #endif // TTGPSLOGGERPOSITIONRECORDER_H

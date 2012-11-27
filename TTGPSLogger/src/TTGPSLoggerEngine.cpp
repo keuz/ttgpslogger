@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -95,7 +95,6 @@ CTTGPSLoggerEngine* CTTGPSLoggerEngine::NewL(CTTGPSLoggerAppUi* aAppUi)
 
 void CTTGPSLoggerEngine::ConstructL()
 	{
-
 	RDebug::Print(_L("%d \n"), __LINE__);
 	iSettingsData = CTTGPSLoggerSettingsData::NewL();
 	RDebug::Print(_L("%d \n"), __LINE__);
@@ -109,12 +108,17 @@ void CTTGPSLoggerEngine::ConstructL()
     RDebug::Print(_L("%d \n"), __LINE__);
     iRecorderFormatKML = CTTGPSLoggerRecorderFormatKML::NewL(this);
     RDebug::Print(_L("%d \n"), __LINE__);
-    iPositionRequester = CTTGPSLoggerPositionRequester::NewL();
+    iPositionRequester = CTTGPSLoggerPositionRequester::NewL(Settings()->PositioningMethod());
     RDebug::Print(_L("%d \n"), __LINE__, __func__);
     CEikonEnv::Static()->ReadResourceAsDes16L(iMsgStartError1, R_TTGP_TBUF_MSG_START_ERROR1);
     RDebug::Print(_L("%d \n"), __LINE__);
     iPositionRequester->StartL();
     RDebug::Print(_L("%d \n"), __LINE__);
+
+#ifdef DSYSTEM
+    if ( Settings()->GeneralSystem() )
+#endif
+    CEikonEnv::Static()->SetSystem( ETrue );
     
     switch (Settings()->OutputAutostart())
         {
@@ -168,6 +172,11 @@ void CTTGPSLoggerEngine::MenuHide()
     TApaTask task(CEikonEnv::Static()->WsSession());
     task.SetWgId(CEikonEnv::Static()->RootWin().Identifier());
     task.SendToBackground();
+    }
+
+void CTTGPSLoggerEngine::MenuSyncTime()
+    {
+    iPositionRecorder->SyncTimeL();
     }
 
 void CTTGPSLoggerEngine::MenuStartNowL()
@@ -913,7 +922,7 @@ void CTTGPSLoggerEngine::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
     else if (aResourceId == R_TTGP_MENUPANE_MAIN_TOOL)
         {
 #if !defined(__S60_50__) && !defined(__S60_32__)
-        aMenuPane->SetItemDimmed(ETTGPSLoggerCommandToolSatellite, ETrue);
+//        aMenuPane->SetItemDimmed(ETTGPSLoggerCommandToolSatellite, ETrue);
 #endif // defined(__S60_50__) || defined(__S60_32__)
         //aMenuPane->SetItemDimmed(ETTGPSLoggerCommandToolSatellite, ETrue);
         //aMenuPane->SetItemDimmed(ETTGPSLoggerCommandToolGPSStatus, ETrue);
@@ -924,7 +933,7 @@ void CTTGPSLoggerEngine::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 void CTTGPSLoggerEngine::SetToolbarL()
     {
 #ifdef __S60_50__
-    CAknToolbar* toolbar = AppUi()->CurrentFixedToolbar();
+	CAknToolbar* toolbar = AppUi()->CurrentFixedToolbar();
     if (toolbar)
         {
         DynInitToolbarL(0, toolbar);

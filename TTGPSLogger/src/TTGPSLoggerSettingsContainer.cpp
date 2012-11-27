@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -47,6 +47,7 @@ CTTGPSLoggerSettingsContainer::~CTTGPSLoggerSettingsContainer()
     naviPane->Pop(iNaviDecorator);
     delete iNaviDecorator;
     
+    delete iSettingsListGeneral;
     delete iSettingsListDisplay;
     delete iSettingsListOutput;
     delete iSettingsListNMEA;
@@ -86,17 +87,19 @@ void CTTGPSLoggerSettingsContainer::ConstructL(const TRect& aRect)
     iTabGroup->SetActiveTabByIndex(0);
     naviPane->PushL(*iNaviDecorator);
     
-    iSettingsListNMEA = CTTGPSLoggerSettingsList::NewL(iParent, aRect, 2);
-    iSettingsListDisplay = CTTGPSLoggerSettingsList::NewL(iParent, aRect, 0);
-    iSettingsListOutput = CTTGPSLoggerSettingsList::NewL(iParent, aRect, 1);
-    iSettingsListGPX = CTTGPSLoggerSettingsList::NewL(iParent, aRect, 3);
-    iSettingsListKML = CTTGPSLoggerSettingsList::NewL(iParent, aRect, 4);
-    iSettingsListDisplay->MakeVisible(ETrue);
+    iSettingsListNMEA = CTTGPSLoggerSettingsList::NewL(iParent, aRect, 3);
+    iSettingsListGeneral = CTTGPSLoggerSettingsList::NewL(iParent, aRect, 0);
+    iSettingsListDisplay = CTTGPSLoggerSettingsList::NewL(iParent, aRect, 1);
+    iSettingsListOutput = CTTGPSLoggerSettingsList::NewL(iParent, aRect, 2);
+    iSettingsListGPX = CTTGPSLoggerSettingsList::NewL(iParent, aRect, 4);
+    iSettingsListKML = CTTGPSLoggerSettingsList::NewL(iParent, aRect, 5);
+    iSettingsListGeneral->MakeVisible(ETrue);
+    iSettingsListDisplay->MakeVisible(EFalse);
     iSettingsListOutput->MakeVisible(EFalse);
     iSettingsListNMEA->MakeVisible(EFalse);
     iSettingsListGPX->MakeVisible(EFalse);
     iSettingsListKML->MakeVisible(EFalse);
-    iSettingsListDisplay->DrawDeferred();
+    iSettingsListGeneral->DrawDeferred();
     
     SetRect(aRect);
     ActivateL();
@@ -116,6 +119,7 @@ TKeyResponse CTTGPSLoggerSettingsContainer::OfferKeyEventL(const TKeyEvent &aKey
                 TInt i1 = iTabGroup->ActiveTabIndex();
                 i1 = (i1 >= (iTabGroup->TabCount() - 1)) ? (iTabGroup->TabCount() - 1) : (i1 + 1);
                 iTabGroup->SetActiveTabByIndex(i1);
+                iSettingsListGeneral->MakeVisible(EFalse);
                 iSettingsListDisplay->MakeVisible(EFalse);
                 iSettingsListOutput->MakeVisible(EFalse);
                 iSettingsListNMEA->MakeVisible(EFalse);
@@ -137,6 +141,7 @@ TKeyResponse CTTGPSLoggerSettingsContainer::OfferKeyEventL(const TKeyEvent &aKey
                 TInt i1 = iTabGroup->ActiveTabIndex();
                 i1 = (i1 <= 0) ? 0 : (i1 - 1);
                 iTabGroup->SetActiveTabByIndex(i1);
+                iSettingsListGeneral->MakeVisible(EFalse);
                 iSettingsListDisplay->MakeVisible(EFalse);
                 iSettingsListOutput->MakeVisible(EFalse);
                 iSettingsListNMEA->MakeVisible(EFalse);
@@ -182,6 +187,11 @@ CCoeControl* CTTGPSLoggerSettingsContainer::ComponentControl(TInt aIndex) const
     CCoeControl* control = NULL;
     switch (aIndex)
         {
+        case ETTGPSLoggerSettingsTabGeneral:
+            {
+            control = iSettingsListGeneral;
+            break;
+            }
         case ETTGPSLoggerSettingsTabDisplay:
             {
             control = iSettingsListDisplay;
@@ -234,6 +244,7 @@ void CTTGPSLoggerSettingsContainer::HandleResourceChange(TInt aType)
             AknLayoutUtils::LayoutMetricsRect(AknLayoutUtils::EMainPane, rect);
             SetRect(rect);
             //AknLayoutUtils::LayoutMetricsRect(AknLayoutUtils::EScreen, rect);
+            //iSettingsListGeneral->SetRect(rect);
             //iSettingsListDisplay->SetRect(rect);
             //iSettingsListOutput->SetRect(rect);
             //iSettingsListNMEA->SetRect(rect);
@@ -252,6 +263,7 @@ void CTTGPSLoggerSettingsContainer::SizeChanged()
     //CEikStatusPane* sp = static_cast<CAknAppUi*>(CEikonEnv::Static()->EikAppUi())->StatusPane();
     //CAknNavigationControlContainer* naviPane = static_cast<CAknNavigationControlContainer*>(sp->ControlL(TUid::Uid(EEikStatusPaneUidNavi)));
     //naviPane->SetRect(Rect());
+    //iSettingsListGeneral->SetRect(Rect());
     //iSettingsListDisplay->SetRect(Rect());
     //iSettingsListOutput->SetRect(Rect());
     //iSettingsListNMEA->SetRect(Rect());

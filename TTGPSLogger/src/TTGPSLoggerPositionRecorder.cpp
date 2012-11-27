@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -29,6 +29,10 @@
 #include <f32file.h>
 #include <lbs.h>
 #include <s32file.h>
+#ifdef USELIGHTS
+#include <HWRMLight.h> // Link against HWRMLightClient.lib.
+#define LIGHT_ATTRIBS CHWRMLight::EPrimaryKeyboard,500
+#endif
 #include <TTGPSLogger.rsg>
 #include "TTGPSLoggerCommon.h"
 #include "TTGPSLoggerAppUi.h"
@@ -66,6 +70,10 @@ CTTGPSLoggerPositionRecorder::~CTTGPSLoggerPositionRecorder()
     delete iMsgRecordSuccess;
     delete iMsgRecordFail1;
     delete iMsgRecordFail2;
+    delete iMsgSatTime;
+#ifdef USELIGHTS
+    delete iLight;
+#endif
     }
 
 CTTGPSLoggerPositionRecorder* CTTGPSLoggerPositionRecorder::NewLC(CTTGPSLoggerEngine* aEngine)
@@ -94,9 +102,13 @@ void CTTGPSLoggerPositionRecorder::ConstructL()
     iMsgRecordSuccess = CEikonEnv::Static()->AllocReadResourceL(R_TTGP_TBUF_MSG_RECORD_SUCCESS);
     iMsgRecordFail1 = CEikonEnv::Static()->AllocReadResourceL(R_TTGP_TBUF_MSG_RECORD_FAIL1);
     iMsgRecordFail2 = CEikonEnv::Static()->AllocReadResourceL(R_TTGP_TBUF_MSG_RECORD_FAIL2);
+    iMsgSatTime = CEikonEnv::Static()->AllocReadResourceL(R_TTGP_TBUF_MSG_LBS_SATTIME);
     
     iPositionData = CTTGPSLoggerPositionData::NewL();
     iFileDataBuf.CreateL(8192);
+#ifdef USELIGHTS
+    iLight = CHWRMLight::NewL();
+#endif
     }
 
 void CTTGPSLoggerPositionRecorder::Init()
@@ -192,7 +204,10 @@ void CTTGPSLoggerPositionRecorder::RecordL()
         }
     else
         {
-        if (iFilePoint == 0)
+#ifdef USELIGHTS
+    	iLight->LightOnL(LIGHT_ATTRIBS);
+#endif
+    	if (iFilePoint == 0)
         	{
             iRecorderFormat->SetHeaderL(iFileDataBuf, iFileName);
             SetDataToFileL(iFileDataBuf);
@@ -229,7 +244,10 @@ void CTTGPSLoggerPositionRecorder::RecordL()
 
 void CTTGPSLoggerPositionRecorder::PauseL()
     {
-    if (iStatus == EStatusRecording || iStatus == EStatusAutoPausing)
+#ifdef USELIGHTS
+	iLight->LightOnL(LIGHT_ATTRIBS);
+#endif
+	if (iStatus == EStatusRecording || iStatus == EStatusAutoPausing)
         {
         iStatus = EStatusPausing;
         for (int i1 = 0; i1 < iRecorderObserver.Count(); i1++)
@@ -239,12 +257,72 @@ void CTTGPSLoggerPositionRecorder::PauseL()
         }
     }
 
+void CTTGPSLoggerPositionRecorder::SyncTimeL()
+    {
+	TTime SatTime=iPositionData->SatelliteTime();
+
+/*
+    RBuf msg;
+    msg.CleanupClosePushL();
+    msg.CreateL(128);
+    msg.Append(*iMsgSatTime);
+    msg.Append(_L("("));
+    TTGPSLoggerCommon::AppendFormatDateTimeL(msg, SatTime, TRUE);
+    msg.Append(_L(")"));
+    CAknConfirmationNote *note = new (ELeave) CAknConfirmationNote(EFalse);
+    note->ExecuteLD(msg);
+    CleanupStack::PopAndDestroy(); // msg
+return;
+*/
+	RProcess process(KCurrentProcessHandle);
+	process.Id().Id();
+
+	if ((iPositionData->SatelliteNumUsed()>0) && (SatTime>0) && (process.HasCapability(ECapabilityTCB)) )
+		{
+		User::LeaveIfError(User::SetUTCTimeSecure(SatTime));
+		RBuf msg;
+		msg.CleanupClosePushL();
+		msg.CreateL(128);
+		msg.Append(*iMsgRecordSuccess);
+        msg.Append(_L("("));
+        TTGPSLoggerCommon::AppendFormatDateTimeL(msg, SatTime, TRUE);
+        msg.Append(_L(")"));
+		CAknConfirmationNote *note = new (ELeave) CAknConfirmationNote(EFalse);
+		note->ExecuteLD(msg);
+		CleanupStack::PopAndDestroy(); // msg
+		return;
+		}
+
+	if (! process.HasCapability(ECapabilityWriteDeviceData)) {
+		RBuf msg;
+		msg.CleanupClosePushL();
+		msg.CreateL(128);
+		msg.Append(*iMsgSatTime);
+		msg.Append(_L("(no WriteDeviceData capability)"));
+		CAknConfirmationNote *note = new (ELeave) CAknConfirmationNote(EFalse);
+		note->ExecuteLD(msg);
+		CleanupStack::PopAndDestroy(); // msg
+		return;
+		}
+	
+	if ((iPositionData->SatelliteNumUsed()>0) && (SatTime>0))
+		User::LeaveIfError(User::SetUTCTime(SatTime));
+	else {
+        CAknWarningNote *note = new (ELeave) CAknWarningNote(EFalse);
+        note->ExecuteLD(*iMsgSatTime);
+        }
+    }
+
 void CTTGPSLoggerPositionRecorder::ResumeL()
     {
     if (iStatus == EStatusPausing)
         {
         iStatus = EStatusRecording;
         iStatus = NewStatus();
+        if (iFileSize > 0) {
+			iRecorderFormat->SetSegmentL(iFileDataBuf);
+			AppendDataToFileL(iFileDataBuf);
+        }
         for (int i1 = 0; i1 < iRecorderObserver.Count(); i1++)
             {
             iRecorderObserver[i1]->RecorderUpdatedL(MsgNaviState(), iFileName, iFilePoint, iFileSize);
@@ -338,17 +416,26 @@ void CTTGPSLoggerPositionRecorder::PositionUpdatedPartialL(CTTGPSLoggerPositionD
 
 void CTTGPSLoggerPositionRecorder::PositionQualityLossL()
     {
-    iPositionData->Init();
+#ifdef USELIGHTS
+	iLight->LightOnL(LIGHT_ATTRIBS);
+#endif
+	iPositionData->Init();
     }
 
 void CTTGPSLoggerPositionRecorder::PositionTimedOutL()
     {
-    iPositionData->Init();
+#ifdef USELIGHTS
+	iLight->LightOnL(LIGHT_ATTRIBS);
+#endif
+	iPositionData->Init();
     }
 
 void CTTGPSLoggerPositionRecorder::PositionErrorL(TInt aErrorCode)
     {
-    iPositionData->Init();
+#ifdef USELIGHTS
+	iLight->LightOnL(LIGHT_ATTRIBS);
+#endif
+	iPositionData->Init();
     }
 
 void CTTGPSLoggerPositionRecorder::AppendDataToFileL(const TDesC8& aData)
@@ -376,6 +463,7 @@ void CTTGPSLoggerPositionRecorder::AppendDataToFileL(const TDesC8& aData)
     RFileWriteStream outputFileStream(file, pos);
     CleanupClosePushL(outputFileStream);
     outputFileStream.WriteL(aData);
+    outputFileStream.CommitL();
     iFileSize += aData.Size();
     CleanupStack::PopAndDestroy(); // outputFileStream
     CleanupStack::PopAndDestroy(); // file
@@ -405,6 +493,7 @@ void CTTGPSLoggerPositionRecorder::SetDataToFileL(const TDesC8& aData)
     RFileWriteStream outputFileStream(file);
     CleanupClosePushL(outputFileStream);
     outputFileStream.WriteL(aData);
+    outputFileStream.CommitL();
     iFileSize = aData.Size();
     CleanupStack::PopAndDestroy(); // outputFileStream
     CleanupStack::PopAndDestroy(); // file

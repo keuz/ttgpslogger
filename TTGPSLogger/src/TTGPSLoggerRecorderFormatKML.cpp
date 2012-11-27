@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -101,7 +101,18 @@ void CTTGPSLoggerRecorderFormatKML::SetHeaderL(TDes8& aHeader, const TDesC& aFil
 
 void CTTGPSLoggerRecorderFormatKML::SetBodyL(TDes8& aBody, const TDesC& aFileName, const TInt aFilePoint, CTTGPSLoggerPositionData* aPositionData)
     {
+    TRealFormat numberFormat;
+    TReal tmpVal;
+    TBuf8<50> valA;
+    TBuf<50> valB;
+    TBuf<50> valC;
     TReal64 speed;
+    
+    // set culture independant decimal separator
+    numberFormat.iPoint = '.';
+    numberFormat.iTriLen = 0;
+    numberFormat.iType = KRealFormatFixed | KDoNotUseTriads;
+    
     TTGPSLoggerCommon::SetNaN(speed);
     if (!Math::IsNaN(aPositionData->HorizontalSpeed()) &&
         !Math::IsNaN(aPositionData->VerticalSpeed()))
@@ -154,14 +165,29 @@ void CTTGPSLoggerRecorderFormatKML::SetBodyL(TDes8& aBody, const TDesC& aFileNam
         aBody.Append(_L8("</when>\n"));
         aBody.Append(_L8("      </TimeStamp>\n"));
         aBody.Append(_L8("      <Point>\n"));
-        if (Math::IsNaN(aPositionData->Position().Altitude()))
+        
+        // create lon + lat line
+        numberFormat.iPlaces = 6;
+        tmpVal = aPositionData->Position().Longitude();
+        valA.Num(tmpVal, numberFormat);
+        tmpVal = aPositionData->Position().Latitude();
+        valB.Num(tmpVal, numberFormat);
+        
+        aBody.AppendFormat(_L8("        <coordinates>"));aBody.Append(valA);aBody.AppendFormat(_L8(","));aBody.Append(valB);
+        if (!Math::IsNaN(aPositionData->Position().Altitude()))
+            //{
+            //aBody.AppendFormat(_L8("        <coordinates>%.6f,%.6f</coordinates>\n"), aPositionData->Position().Longitude(), aPositionData->Position().Latitude());
+            //}
+        //else
             {
-            aBody.AppendFormat(_L8("        <coordinates>%.6f,%.6f</coordinates>\n"), aPositionData->Position().Longitude(), aPositionData->Position().Latitude());
+            //aBody.AppendFormat(_L8("        <coordinates>%.6f,%.6f,%.1f</coordinates>\n"), aPositionData->Position().Longitude(), aPositionData->Position().Latitude(), aPositionData->Position().Altitude());
+            numberFormat.iPlaces = 1;
+            tmpVal = aPositionData->Position().Altitude();
+            valC.Num(tmpVal, numberFormat);
+            aBody.AppendFormat(_L8(","));aBody.Append(valC);
             }
-        else
-            {
-            aBody.AppendFormat(_L8("        <coordinates>%.6f,%.6f,%.1f</coordinates>\n"), aPositionData->Position().Longitude(), aPositionData->Position().Latitude(), aPositionData->Position().Altitude());
-            }
+        aBody.AppendFormat(_L8("</coordinates>\n"));
+        
         aBody.Append(_L8("      </Point>\n"));
         aBody.Append(_L8("      <description><![CDATA[<table>"));
         if (iEngine->Settings()->KMLPmDescription(CTTGPSLoggerSettingsData::ETTGPSLoggerSettingsKMLPmDescriptionIndexPoint))
@@ -294,6 +320,10 @@ void CTTGPSLoggerRecorderFormatKML::SetBodyL(TDes8& aBody, const TDesC& aFileNam
         aBody.Append(_L8("</table>]]></description>\n"));
         aBody.Append(_L8("    </Placemark>\n"));
         }
+    }
+
+void CTTGPSLoggerRecorderFormatKML::SetSegmentL(TDes8& aBody)
+    {
     }
 
 void CTTGPSLoggerRecorderFormatKML::SetFooterL(TDes8& aFooter)

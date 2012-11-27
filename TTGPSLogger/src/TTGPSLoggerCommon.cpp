@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -31,10 +31,21 @@
 #include <aknnavide.h> 
 #include <aknnavilabel.h>
 #include <utf.h>
+#include <aknlistquerydialog.h>
+#include <aknnotewrappers.h>
+#include <aknmessagequerydialog.h>
+#include <pathinfo.h>
+#include <bautils.h>
+#include <TTGPSLogger.rsg>
 #include "TTGPSLoggerAppUi.h"
 #include "TTGPSLoggerCommon.h"
 #include "TTGPSLoggerEngine.h"
 #include "TTGPSLoggerSettingsData.h"
+
+#define C_APPUI static_cast<CTTGPSLoggerAppUi*>(CEikonEnv::Static()->EikAppUi())
+
+#define DUMP_DISKS
+
 
 void TTGPSLoggerCommon::AppendFormatLongitude(TDes8& aBuf, TReal64 aLongitude)
 	{
@@ -549,4 +560,128 @@ TInt TTGPSLoggerCommon::ConvertTDes8ToTDes(TDes& aBuf, const TDesC8& aBuf8)
 TInt TTGPSLoggerCommon::ConvertTDesToTDes8(TDes8& aBuf8, const TDesC& aBuf)
 	{
 	return CnvUtfConverter::ConvertFromUnicodeToUtf8(aBuf8, aBuf);
+	}
+
+TBool TTGPSLoggerCommon::CheckDiskL(TInt aDNum, TBool aFull)
+	{
+#ifdef DUMP_DISKS
+	TInt aStart=EDriveA, aStop=EDriveS; // T, U, V, X and Y are not standard, Z is the ROM
+	if (aDNum>-1)
+		aStart=aStop=aDNum;
+	TBuf<1000> aText;
+	TChar driveLetter;
+	TInt driveNumber;
+	TVolumeInfo volumeInfo;
+	TDriveInfo driveInfo;
+	RFs &fs = CCoeEnv::Static()->FsSession();
+	aText.Zero();
+	for(driveNumber=aStart;driveNumber<=aStop;driveNumber++)
+	{
+		if (driveNumber==EDriveD) // used to store temporary files
+			continue;
+		fs.Drive(driveInfo,driveNumber);
+		if (TInt(driveInfo.iDriveAtt)==KDriveAbsent)
+			continue; // test whether drive is available. If not, skip to next drive
+		if ((fs.Volume(volumeInfo, driveNumber)) != KErrNone)
+			continue;
+		if ((fs.DriveToChar(driveNumber,driveLetter)) != KErrNone)
+			continue;
+		if (aFull==EFalse)
+			return(ETrue);
+
+	    CDesC16Array *itemArray = CCoeEnv::Static()->ReadDesCArrayResourceL(R_TTGP_ARRAY_DIALOG_MEMORY1);
+	    CleanupStack::PushL(itemArray);
+		HBufC* iMsgPath = CEikonEnv::Static()->AllocReadResourceL(R_TTGP_TBUF_MSG_PATH);
+	    CleanupStack::PushL(iMsgPath);
+		HBufC* iMsgFree = CEikonEnv::Static()->AllocReadResourceL(R_TTGP_TBUF_MSG_FREE);
+	    CleanupStack::PushL(iMsgFree);
+		HBufC* iMsgLabel = CEikonEnv::Static()->AllocReadResourceL(R_TTGP_TBUF_MSG_LABEL);
+	    CleanupStack::PushL(iMsgLabel);
+
+		if (driveNumber==EDriveC)
+			{
+			aText.Append((*itemArray)[1]);
+			aText.AppendFormat(_L("\n%S: "), iMsgPath);
+			aText.Append(PathInfo::PhoneMemoryRootPath());
+			aText.Append(_L("\n"));
+			}
+		if (driveNumber==EDriveE)
+			{
+			aText.Append((*itemArray)[2]);
+			aText.AppendFormat(_L("\n%S: "), iMsgPath);
+			aText.Append(PathInfo::MemoryCardRootPath());
+			aText.Append(_L("\n"));
+			}
+		if (driveNumber==EDriveF)
+			{
+			aText.Append((*itemArray)[3]);
+			aText.AppendFormat(_L("\n%S: f:\\\n"), iMsgPath);
+			}
+		aText.Append(driveLetter);
+		if (volumeInfo.iSize > 0)
+			{
+			aText.Append(_L(" = "));
+			if (volumeInfo.iSize > 3000000000LL)
+				aText.AppendFormat(_L("%.1f GB"), (TReal) volumeInfo.iSize/1073741824LL);
+			else
+				aText.AppendFormat(_L("%.1f MB"), (TReal) volumeInfo.iSize/1048576);
+			aText.AppendFormat(_L(", %S: "), iMsgFree);
+
+			if (volumeInfo.iFree > 3000000000LL)
+				aText.AppendFormat(_L("%.1f GB"), (TReal) volumeInfo.iFree/1073741824LL);
+			else
+				aText.AppendFormat(_L("%.1f MB"), (TReal) volumeInfo.iFree/1048576);
+			aText.AppendFormat(_L(" (%.0f%%)"), (TReal) ( volumeInfo.iSize - volumeInfo.iFree ) / (TReal) volumeInfo.iSize * 100.0);
+			}
+		if ((volumeInfo.iName).Length()>0)
+			{
+			aText.AppendFormat(_L(", %S: "), iMsgLabel);
+			aText.Append(volumeInfo.iName);
+			}
+		aText.Append(_L("\n\n"));
+	    CleanupStack::PopAndDestroy(); // iMsgLabel
+	    CleanupStack::PopAndDestroy(); // iMsgFree
+	    CleanupStack::PopAndDestroy(); // iMsgPath
+	    CleanupStack::PopAndDestroy(); // itemArray
+	}
+	if (aFull==EFalse)
+		return(EFalse);
+	if (aDNum>-1)
+		{
+		if (aText.Length()==0)
+			{
+		    HBufC* title = CEikonEnv::Static()->AllocReadResourceLC(R_TTGP_TBUF32_LISTMEMORY_INVALID);
+		    aText.Copy(*title);
+		    CleanupStack::PopAndDestroy(); // title
+		    CAknErrorNote *note = new (ELeave) CAknErrorNote(EFalse);
+			note->ExecuteLD(aText);
+			return(EFalse); // invalid drive
+			}
+		else
+			{
+		    CAknMessageQueryDialog* dialog = new (ELeave) CAknMessageQueryDialog();
+		    CleanupStack::PushL(dialog);
+		    dialog->PrepareLC(R_TTGP_DIALOG_MESSAGEQUERY_OK);
+		    dialog->SetMessageTextL(aText);
+		    CleanupStack::Pop(); // dialog
+		    dialog->RunLD();
+			return(ETrue); // valid drive
+			}
+		}
+	else
+		{
+	    HBufC* title = CEikonEnv::Static()->AllocReadResourceLC(R_TTGP_TBUF32_LISTMEMORY_TITLE);
+	    CAknMessageQueryDialog* dialog = new (ELeave) CAknMessageQueryDialog();
+	    CleanupStack::PushL(dialog);
+	    dialog->PrepareLC(R_TTGP_DIALOG_MESSAGEQUERY_OK);
+	    dialog->QueryHeading()->SetTextL(*title);
+	    dialog->SetMessageTextL(aText);
+	    CleanupStack::Pop(); // dialog
+	    dialog->RunLD();
+	    CleanupStack::PopAndDestroy(); // title
+		return(ETrue); // listing
+		}
+#else
+	return(ETrue); // listing
+#endif // DUMP_DISKS
 	}
