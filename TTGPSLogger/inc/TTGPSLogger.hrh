@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -39,10 +39,12 @@ enum TTTGPSLoggerCommandIds
 	ETTGPSLoggerCommandPause,
 	ETTGPSLoggerCommandResume,
 	ETTGPSLoggerCommandStop,
+	ETTGPSLoggerCommandHide,
 	ETTGPSLoggerCommandTool,
 	ETTGPSLoggerCommandToolSatellite,
 	ETTGPSLoggerCommandToolGPSStatus,
 	ETTGPSLoggerCommandToolNMEAViewer,
+	ETTGPSLoggerCommandSyncTime,
 	ETTGPSLoggerCommandSettings,
 	ETTGPSLoggerCommandHelp,
 	ETTGPSLoggerCommandHelpAbout,
@@ -74,7 +76,9 @@ enum TTTGPSLoggerTBIIds
     };
 enum TTTGPSLoggerSettingItemIds
     {
-    ETTGPSLoggerSettingItemDisplayMeasurementSystem = 0x6301,
+    ETTGPSLoggerSettingItemGeneralSystem = 0x6301,
+    ETTGPSLoggerSettingItemGeneralPositioningMethod,
+    ETTGPSLoggerSettingItemDisplayMeasurementSystem,
     ETTGPSLoggerSettingItemDisplayCoordinateFormat,
     ETTGPSLoggerSettingItemDisplayItems,
     ETTGPSLoggerSettingItemDisplayShortcuts,
@@ -92,9 +96,14 @@ enum TTTGPSLoggerSettingItemIds
     ETTGPSLoggerSettingItemNMEASentences,
     ETTGPSLoggerSettingItemGPXExt,
     ETTGPSLoggerSettingItemGPXTags,
+    ETTGPSLoggerSettingItemGPXAuthor,
+    ETTGPSLoggerSettingItemGPXEmail,
+    ETTGPSLoggerSettingItemGPXUrl,
+    ETTGPSLoggerSettingItemGPXUrlName,
     ETTGPSLoggerSettingItemKMLExt,
     ETTGPSLoggerSettingItemKMLPmName,
-    ETTGPSLoggerSettingItemKMLPmDescription
+    ETTGPSLoggerSettingItemKMLPmDescription,
+    ETTGPSLoggerSettingItemGPXSegment
     };
 enum TTTGPSLoggerViewIds
     {
@@ -105,7 +114,8 @@ enum TTTGPSLoggerViewIds
     };
 enum TTTGPSLoggerSettingsTabIds
     {
-    ETTGPSLoggerSettingsTabDisplay = 0x0000,
+    ETTGPSLoggerSettingsTabGeneral = 0x0000,
+    ETTGPSLoggerSettingsTabDisplay,
     ETTGPSLoggerSettingsTabOutput,
     ETTGPSLoggerSettingsTabNMEA,
     ETTGPSLoggerSettingsTabGPX,

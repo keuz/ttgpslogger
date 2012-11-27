@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -129,6 +129,11 @@ RESOURCE MENU_PANE r_ttgp_menupane_main
 				txt = qtn_command_main_tool;
 				cascade = r_ttgp_menupane_main_tool;
                 },
+		MENU_ITEM
+				{
+				command = ETTGPSLoggerCommandSyncTime;
+				txt = qtn_command_main_synctime;
+				},
 		MENU_ITEM
 				{
 				command = ETTGPSLoggerCommandSettings;
@@ -331,6 +336,11 @@ RESOURCE NAVI_DECORATOR r_ttgp_navidecorator_settings
         active = 0;
         tabs =
             {
+			TAB
+				{
+				id = ETTGPSLoggerSettingsTabGeneral;
+				txt = qtn_tab_settings_general;
+				},
             TAB
                 {
                 id = ETTGPSLoggerSettingsTabDisplay;
@@ -357,6 +367,34 @@ RESOURCE NAVI_DECORATOR r_ttgp_navidecorator_settings
                 txt = qtn_tab_settings_kml;
                 }
             };
+        };
+    }
+
+
+RESOURCE AVKON_SETTING_ITEM_LIST r_ttgp_settingitemlist_general
+    {
+    flags = 0;
+    title = "";
+    initial_number = 1;
+    items = 
+        {
+#ifdef DSYSTEM
+        AVKON_SETTING_ITEM
+			{
+			identifier = ETTGPSLoggerSettingItemGeneralSystem;
+			setting_page_resource = r_ttgp_settingspage_general_system;
+			associated_resource = r_ttgp_popupsettingstexts_general_system;
+			name = qtn_settingsitem_general_system;
+			}
+#endif
+#ifdef POSMETH
+		,AVKON_SETTING_ITEM
+			{
+			identifier = ETTGPSLoggerSettingItemGeneralPositioningMethod;
+            setting_page_resource = r_ttgp_settingspage_nmea_ext;
+            name = qtn_settingsitem_general_positioningmethod;
+			}
+#endif
         };
     }
 
@@ -510,7 +548,38 @@ RESOURCE AVKON_SETTING_ITEM_LIST r_ttgp_settingitemlist_gpx
             setting_page_resource = r_ttgp_settingspage_gpx_tags;
             associated_resource = r_ttgp_popupsettingstexts_gpx_tags;
             name = qtn_settingsitem_gpx_tags;
-            }
+            },
+		AVKON_SETTING_ITEM
+			{
+			identifier = ETTGPSLoggerSettingItemGPXAuthor;
+			setting_page_resource = r_ttgp_settingspage_gpx_author;
+			name = qtn_settingsitem_gpx_author;
+			},
+		AVKON_SETTING_ITEM
+			{
+			identifier = ETTGPSLoggerSettingItemGPXEmail;
+			setting_page_resource = r_ttgp_settingspage_gpx_email;
+			name = qtn_settingsitem_gpx_email;
+			},
+		AVKON_SETTING_ITEM
+			{
+			identifier = ETTGPSLoggerSettingItemGPXUrl;
+			setting_page_resource = r_ttgp_settingspage_gpx_url;
+			name = qtn_settingsitem_gpx_url;
+			},
+		AVKON_SETTING_ITEM
+			{
+			identifier = ETTGPSLoggerSettingItemGPXUrlName;
+			setting_page_resource = r_ttgp_settingspage_gpx_urlname;
+			name = qtn_settingsitem_gpx_urlname;
+			},
+		AVKON_SETTING_ITEM
+			{
+			identifier = ETTGPSLoggerSettingItemGPXSegment;
+			setting_page_resource = r_ttgp_settingspage_gpx_segment;
+			associated_resource = r_ttgp_popupsettingstexts_gpx_segment;
+			name = qtn_settingsitem_gpx_segment;
+			}
         };
     }
 RESOURCE AVKON_SETTING_ITEM_LIST r_ttgp_settingitemlist_kml
@@ -548,6 +617,8 @@ RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_display_measurementsystem
     number = EAknSettingPageNoOrdinalDisplayed;
     label = qtn_settingsitem_display_measurementsystem;
     type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
     editor_resource_id = r_ttgp_popupsettinglist_display_measurementsystem;
     }
 RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_display_measurementsystem
@@ -581,6 +652,8 @@ RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_display_coordinateformat
     number = EAknSettingPageNoOrdinalDisplayed;
     label = qtn_settingsitem_display_coordinateformat;
     type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
     editor_resource_id = r_ttgp_popupsettinglist_display_coordinateformat;
     }
 RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_display_coordinateformat
@@ -673,6 +746,8 @@ RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_display_shortcuts
     number = EAknSettingPageNoOrdinalDisplayed;
     label = qtn_settingsitem_display_shortcuts;
     type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
     editor_resource_id = r_ttgp_popupsettinglist_display_shortcuts;
     }
 RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_display_shortcuts
@@ -701,12 +776,84 @@ RESOURCE ARRAY r_ttgp_arraypopeduptexts_display_shortcuts
         };
     }
 
+#ifdef DSYSTEM
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_general_system
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_general_system;
+    type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+    editor_resource_id = r_ttgp_popupsettinglist_general_system;
+    }
+RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_general_system
+    {
+    flags = 0;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_general_system
+    {
+    setting_texts_resource   = r_ttgp_arraysettingstexts_general_system;
+    popped_up_texts_resource = r_ttgp_arraypopeduptexts_general_system;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_general_system
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0; text = qtn_settingsitem_general_system_disabled; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = qtn_settingsitem_general_system_enabled; }
+        };
+    }
+RESOURCE ARRAY r_ttgp_arraypopeduptexts_general_system
+    {
+    items =
+        {
+        LBUF { txt = qtn_settingsitem_general_system_disabled; },
+        LBUF { txt = qtn_settingsitem_general_system_enabled; }
+        };
+    }
+#endif
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_gpx_segment
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_settingsitem_gpx_segment;
+    type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+    editor_resource_id = r_ttgp_popupsettinglist_gpx_segment;
+    }
+RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_gpx_segment
+    {
+    flags = 0;
+    }
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_ttgp_popupsettingstexts_gpx_segment
+    {
+    setting_texts_resource   = r_ttgp_arraysettingstexts_gpx_segment;
+    popped_up_texts_resource = r_ttgp_arraypopeduptexts_gpx_segment;
+    }
+RESOURCE ARRAY r_ttgp_arraysettingstexts_gpx_segment
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = 0; text = qtn_settingsitem_gpx_segment_disabled; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = qtn_settingsitem_gpx_segment_enabled; }
+        };
+    }
+RESOURCE ARRAY r_ttgp_arraypopeduptexts_gpx_segment
+    {
+    items =
+        {
+        LBUF { txt = qtn_settingsitem_gpx_segment_disabled; },
+        LBUF { txt = qtn_settingsitem_gpx_segment_enabled; }
+        };
+    }
 
 RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autostart
     {
     number = EAknSettingPageNoOrdinalDisplayed;
     label = qtn_settingsitem_output_autostart;
     type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
     editor_resource_id = r_ttgp_popupsettinglist_output_autostart;
     }
 RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_output_autostart
@@ -761,6 +908,8 @@ RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_intervals
     number = EAknSettingPageNoOrdinalDisplayed;
     label = qtn_settingsitem_output_intervals;
     type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
     editor_resource_id = r_ttgp_popupsettinglist_output_intervals;
     }
 RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_output_intervals
@@ -791,6 +940,8 @@ RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_distance
     number = EAknSettingPageNoOrdinalDisplayed;
     label = qtn_settingsitem_output_distance;
     type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
     editor_resource_id = r_ttgp_popupsettinglist_output_distance;
     }
 RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_output_distance
@@ -823,6 +974,8 @@ RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autopausehspeed
     number = EAknSettingPageNoOrdinalDisplayed;
     label = qtn_settingsitem_output_autopausehspeed;
     type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
     editor_resource_id = r_ttgp_popupsettinglist_output_autopausespeed;
     }
 RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autopausespeed
@@ -830,6 +983,8 @@ RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autopausespeed
     number = EAknSettingPageNoOrdinalDisplayed;
     label = qtn_settingsitem_output_autopausespeed;
     type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
     editor_resource_id = r_ttgp_popupsettinglist_output_autopausespeed;
     }
 RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_output_autopausespeed
@@ -861,6 +1016,8 @@ RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autopausehacc
     number = EAknSettingPageNoOrdinalDisplayed;
     label = qtn_settingsitem_output_autopausehacc;
     type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
     editor_resource_id = r_ttgp_popupsettinglist_output_autopausehacc;
     }
 RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_output_autopausehacc
@@ -890,6 +1047,8 @@ RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autopausehdop
     number = EAknSettingPageNoOrdinalDisplayed;
     label = qtn_settingsitem_output_autopausehdop;
     type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
     editor_resource_id = r_ttgp_popupsettinglist_output_autopausedop;
     }
 RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autopausepdop
@@ -897,6 +1056,8 @@ RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_output_autopausepdop
     number = EAknSettingPageNoOrdinalDisplayed;
     label = qtn_settingsitem_output_autopausepdop;
     type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
     editor_resource_id = r_ttgp_popupsettinglist_output_autopausedop;
     }
 RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_output_autopausedop
@@ -935,6 +1096,34 @@ RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_nmea_ext
 RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_gpx_ext
     {
     label = qtn_settingsitem_gpx_ext;
+    type = EEikCtEdwin;
+    editor_resource_id = r_ttgp_edwin_nmea_ext;
+    hint_text = "";
+    }
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_gpx_author
+    {
+    label = qtn_settingsitem_gpx_author;
+    type = EEikCtEdwin;
+    editor_resource_id = r_ttgp_edwin_nmea_ext;
+    hint_text = "";
+    }
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_gpx_email
+    {
+    label = qtn_settingsitem_gpx_email;
+    type = EEikCtEdwin;
+    editor_resource_id = r_ttgp_edwin_nmea_ext;
+    hint_text = "";
+    }
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_gpx_url
+    {
+    label = qtn_settingsitem_gpx_url;
+    type = EEikCtEdwin;
+    editor_resource_id = r_ttgp_edwin_nmea_ext;
+    hint_text = "";
+    }
+RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_gpx_urlname
+    {
+    label = qtn_settingsitem_gpx_urlname;
     type = EEikCtEdwin;
     editor_resource_id = r_ttgp_edwin_nmea_ext;
     hint_text = "";
@@ -1024,13 +1213,15 @@ RESOURCE ARRAY r_ttgp_arraysettingstexts_gpx_tags
         {
         AVKON_ENUMERATED_TEXT { value = 0;  text = qtn_settingsitem_gpx_tags_time; },
         AVKON_ENUMERATED_TEXT { value = 1;  text = qtn_settingsitem_gpx_tags_ele; },
-        AVKON_ENUMERATED_TEXT { value = 2;  text = qtn_settingsitem_gpx_tags_course; },
-        AVKON_ENUMERATED_TEXT { value = 3;  text = qtn_settingsitem_gpx_tags_speed; },
-        AVKON_ENUMERATED_TEXT { value = 4;  text = qtn_settingsitem_gpx_tags_fix; },
-        AVKON_ENUMERATED_TEXT { value = 5;  text = qtn_settingsitem_gpx_tags_sat; },
-        AVKON_ENUMERATED_TEXT { value = 6;  text = qtn_settingsitem_gpx_tags_hdop; },
-        AVKON_ENUMERATED_TEXT { value = 7;  text = qtn_settingsitem_gpx_tags_vdop; },
-        AVKON_ENUMERATED_TEXT { value = 8;  text = qtn_settingsitem_gpx_tags_pdop; }
+        AVKON_ENUMERATED_TEXT { value = 2;  text = qtn_settingsitem_gpx_tags_seaalt; },
+        AVKON_ENUMERATED_TEXT { value = 3;  text = qtn_settingsitem_gpx_tags_course; },
+        AVKON_ENUMERATED_TEXT { value = 4;  text = qtn_settingsitem_gpx_tags_speed; },
+        AVKON_ENUMERATED_TEXT { value = 5;  text = qtn_settingsitem_gpx_tags_usevspeed; },
+        AVKON_ENUMERATED_TEXT { value = 6;  text = qtn_settingsitem_gpx_tags_fix; },
+        AVKON_ENUMERATED_TEXT { value = 7;  text = qtn_settingsitem_gpx_tags_sat; },
+        AVKON_ENUMERATED_TEXT { value = 8;  text = qtn_settingsitem_gpx_tags_hdop; },
+        AVKON_ENUMERATED_TEXT { value = 9;  text = qtn_settingsitem_gpx_tags_vdop; },
+        AVKON_ENUMERATED_TEXT { value = 10;  text = qtn_settingsitem_gpx_tags_pdop; }
         };
     }
 RESOURCE ARRAY r_ttgp_arraypopeduptexts_gpx_tags
@@ -1039,8 +1230,10 @@ RESOURCE ARRAY r_ttgp_arraypopeduptexts_gpx_tags
         {
         LBUF { txt = qtn_settingsitem_gpx_tags_time; },
         LBUF { txt = qtn_settingsitem_gpx_tags_ele; },
+        LBUF { txt = qtn_settingsitem_gpx_tags_seaalt; },
         LBUF { txt = qtn_settingsitem_gpx_tags_course; },
         LBUF { txt = qtn_settingsitem_gpx_tags_speed; },
+        LBUF { txt = qtn_settingsitem_gpx_tags_usevspeed; },
         LBUF { txt = qtn_settingsitem_gpx_tags_fix; },
         LBUF { txt = qtn_settingsitem_gpx_tags_sat; },
         LBUF { txt = qtn_settingsitem_gpx_tags_hdop; },
@@ -1054,6 +1247,8 @@ RESOURCE AVKON_SETTING_PAGE r_ttgp_settingspage_kml_pmname
     number = EAknSettingPageNoOrdinalDisplayed;
     label = qtn_settingsitem_kml_pmname;
     type = EAknCtPopupSettingList;
+	softkey_resource = R_AVKON_SOFTKEYS_SELECT_CANCEL__SELECT; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
+	invalid_contents_softkey_resource = R_AVKON_SOFTKEYS_CANCEL; // amacri: workaround to overcome Issue 16 on Nokia C5-03 S60 5th (settings cannot be changed)
     editor_resource_id = r_ttgp_popupsettinglist_kml_pmname;
     }
 RESOURCE POPUP_SETTING_LIST r_ttgp_popupsettinglist_kml_pmname
@@ -1192,17 +1387,27 @@ RESOURCE TBUF32 r_ttgp_tbuf32_gpsstatusview_item_sattime { buf = qtn_gpsstatusvi
 // -----------------------------------------------------------------------------
 //  Settings(Initial Value) resources.
 // -----------------------------------------------------------------------------
+#ifdef POSMETH
+RESOURCE TBUF32 r_ttgp_tbuf32_settings_file_name { buf = "SettingsV3.dat"; }
+#elif DSYSTEM
+RESOURCE TBUF32 r_ttgp_tbuf32_settings_file_name { buf = "SettingsV2.dat"; }
+#else
 RESOURCE TBUF32 r_ttgp_tbuf32_settings_file_name { buf = "Settings.dat"; }
+#endif
 RESOURCE TBUF32 r_ttgp_tbuf32_settings_display_directory { buf = "TTGPSLogger"; }
 RESOURCE TBUF32 r_ttgp_tbuf32_settings_nmea_ext { buf = "nmea"; }
 RESOURCE TBUF32 r_ttgp_tbuf32_settings_gpx_ext { buf = "gpx"; }
+RESOURCE TBUF32 r_ttgp_tbuf32_settings_gpx_author { buf = ""; }
+RESOURCE TBUF32 r_ttgp_tbuf32_settings_gpx_email { buf = ""; }
+RESOURCE TBUF32 r_ttgp_tbuf32_settings_gpx_url { buf = ""; }
+RESOURCE TBUF32 r_ttgp_tbuf32_settings_gpx_urlname { buf = ""; }
 RESOURCE TBUF32 r_ttgp_tbuf32_settings_kml_ext { buf = "kml"; }
 
 // -----------------------------------------------------------------------------
 // Help(About) dialog resources.
 // -----------------------------------------------------------------------------
 RESOURCE TBUF32 r_ttgp_tbuf32_about_title { buf = qtn_dialog_about_title; }
-RESOURCE TBUF   r_ttgp_tbuf_about_text    { buf = "TTGPSLogger Version 0.4 beta\n \nCopyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>\nhttp://ttinputdiary.vox.com/"; }
+RESOURCE TBUF   r_ttgp_tbuf_about_text    { buf = "TTGPSLogger Version 0.5.3\n \nCopyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>\nhttp://ttinputdiary.vox.com/\nRevised by amacri@tiscali.it"; }
 
 // -----------------------------------------------------------------------------
 // Help(Shortcuts) dialog resources.
@@ -1266,6 +1471,25 @@ RESOURCE ARRAY r_ttgp_array_dialog_tool_v31
         {
         LBUF {txt = qtn_command_main_tool_gpsstatus; },
         LBUF {txt = qtn_command_main_tool_nmeaviewer; }
+        };
+    }
+
+// -----------------------------------------------------------------------------
+// Memory resources.
+// -----------------------------------------------------------------------------
+RESOURCE TBUF r_ttgp_tbuf_msg_setting_changed { buf = qtn_msg_setting_changed; }
+RESOURCE TBUF32 r_ttgp_tbuf32_dialog_memory_title { buf = qtn_dialog_memory_title; }
+RESOURCE TBUF32 r_ttgp_tbuf32_listmemory_title { buf = qtn_dialog_listmemory_title; }
+RESOURCE TBUF r_ttgp_tbuf32_listmemory_invalid { buf = qtn_dialog_listmemory_invalid; }
+
+RESOURCE ARRAY r_ttgp_array_dialog_memory1
+    {
+    items =
+        {
+        LBUF {txt = qtn_memory_info; },
+        LBUF {txt = qtn_memory_phone; },
+        LBUF {txt = qtn_memory_mmc; },
+        LBUF {txt = qtn_memory_massm; }
         };
     }
 
@@ -1408,14 +1632,23 @@ RESOURCE DIALOG r_ttgp_dialog_query_notitle_yesno
 // -----------------------------------------------------------------------------
 //  Message resources.
 // -----------------------------------------------------------------------------
+RESOURCE TBUF32 r_ttgp_tbuf32_dialog_positioning_title { buf = qtn_dialog_positioning_title; }
+RESOURCE TBUF32 r_ttgp_tbuf32_availablepositioning_title { buf = qtn_availablepositioning_title; }
+RESOURCE TBUF32 r_ttgp_tbuf32_selectedpositioning_title { buf = qtn_selectedpositioning_title; }
+
+RESOURCE TBUF r_ttgp_tbuf_msg_general_system { buf = qtn_msg_general_system; }
 RESOURCE TBUF r_ttgp_tbuf_msg_start_error1 { buf = qtn_msg_start_error1; }
 RESOURCE TBUF r_ttgp_tbuf_msg_record_success { buf = qtn_msg_record_success; }
 RESOURCE TBUF r_ttgp_tbuf_msg_record_fail1 { buf = qtn_msg_record_fail1; }
 RESOURCE TBUF r_ttgp_tbuf_msg_record_fail2 { buf = qtn_msg_record_fail2; }
 RESOURCE TBUF r_ttgp_tbuf_msg_lbs_error1 { buf = qtn_msg_lbs_error1; }
 RESOURCE TBUF r_ttgp_tbuf_msg_lbs_error2 { buf = qtn_msg_lbs_error2; }
+RESOURCE TBUF r_ttgp_tbuf_msg_lbs_sattime { buf = qtn_msg_lbs_sattime; }
 RESOURCE TBUF r_ttgp_tbuf_msg_positioning_method1 { buf = qtn_msg_positioning_method1; }
 RESOURCE TBUF r_ttgp_tbuf_msg_positioning_method2 { buf = qtn_msg_positioning_method2; }
 RESOURCE TBUF r_ttgp_tbuf_msg_copy_clipboard { buf = qtn_msg_copy_clipboard; }
+RESOURCE TBUF r_ttgp_tbuf_msg_path { buf = qtn_msg_path; }
+RESOURCE TBUF r_ttgp_tbuf_msg_free { buf = qtn_msg_free; }
+RESOURCE TBUF r_ttgp_tbuf_msg_label { buf = qtn_msg_label; }
 
 #include "TTGPSLoggerS60v5x.rssi"

@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -31,6 +31,10 @@
 #define qtn_kml         "KML"
 #define qtn_about       "About"
 #define qtn_shortcuts   "Shortcuts"
+#ifdef DSYSTEM
+#define qtn_system      "System"
+#endif
+#define qtn_segment     "Segments"
 #define qtn_command     "Command"
 
 // Status Panel Title
@@ -54,6 +58,7 @@
 #define qtn_command_main_tool_gpsstatus qtn_gpsstatus
 #define qtn_command_main_tool_nmeaviewer qtn_nmeaviewer
 #define qtn_command_main_settings qtn_settings
+#define qtn_command_main_synctime "Sync time"
 #define qtn_command_main_help "Help"
 #define qtn_command_main_help_about qtn_about
 #define qtn_command_main_help_shortcuts qtn_shortcuts
@@ -70,6 +75,7 @@
 #define qtn_toolbar_main_pause qtn_command_main_pause
 #define qtn_toolbar_main_resume qtn_command_main_resume
 #define qtn_toolbar_main_lock "Lock"
+#define qtn_toolbarhelp_main_start qtn_command_main_start
 #define qtn_toolbarhelp_main_stop qtn_toolbar_main_stop
 #define qtn_toolbarhelp_main_startnow qtn_toolbar_main_startnow
 #define qtn_toolbarhelp_main_record qtn_toolbar_main_record
@@ -150,6 +156,7 @@
 #define qtn_gpsstatusview_item_sattime "Satellite Time(UTC)"
 
 // Tab items(Settings View)
+#define qtn_tab_settings_general "General"
 #define qtn_tab_settings_display "Display"
 #define qtn_tab_settings_output "Output"
 #define qtn_tab_settings_nmea qtn_nmea
@@ -157,6 +164,14 @@
 #define qtn_tab_settings_kml qtn_kml
 
 // Settings items(Settings View)
+#ifdef DSYSTEM
+#define qtn_settingsitem_general_system qtn_system
+#define qtn_settingsitem_general_system_disabled "Standard Application"
+#define qtn_settingsitem_general_system_enabled "System Application"
+#endif
+#ifdef POSMETH
+#define qtn_settingsitem_general_positioningmethod "Positioning Method"
+#endif
 #define qtn_settingsitem_display_measurementsystem "Measurement system"
 #define qtn_settingsitem_display_measurementsystem_metric   "Metric"
 #define qtn_settingsitem_display_measurementsystem_imperial "Imperial"
@@ -255,17 +270,28 @@
 #define qtn_settingsitem_nmea_sentences_gpvtg "GPVTG"
 #define qtn_settingsitem_nmea_sentences_gpzda "GPZDA"
 #define qtn_settingsitem_nmea_sentences_others "Others"
+
+#define qtn_settingsitem_gpx_segment qtn_segment
+#define qtn_settingsitem_gpx_segment_disabled "Single segment"
+#define qtn_settingsitem_gpx_segment_enabled "New seg. on resume"
+
 #define qtn_settingsitem_gpx_ext "File Name(Ext)"
 #define qtn_settingsitem_gpx_tags "Tags"
 #define qtn_settingsitem_gpx_tags_time "time(Required)"
 #define qtn_settingsitem_gpx_tags_ele "ele"
+#define qtn_settingsitem_gpx_tags_seaalt "SeaLevel Altitude"
 #define qtn_settingsitem_gpx_tags_course "course"
 #define qtn_settingsitem_gpx_tags_speed "speed"
+#define qtn_settingsitem_gpx_tags_usevspeed "Use vertical speed"
 #define qtn_settingsitem_gpx_tags_fix "fix"
 #define qtn_settingsitem_gpx_tags_sat "sat"
 #define qtn_settingsitem_gpx_tags_hdop "hdop"
 #define qtn_settingsitem_gpx_tags_vdop "vdop"
 #define qtn_settingsitem_gpx_tags_pdop "pdop"
+#define qtn_settingsitem_gpx_author "Author"
+#define qtn_settingsitem_gpx_email "Email"
+#define qtn_settingsitem_gpx_url "URL"
+#define qtn_settingsitem_gpx_urlname "URL name"
 #define qtn_settingsitem_kml_ext "File Name(Ext)"
 #define qtn_settingsitem_kml_pmname "Placemark(Name)"
 #define qtn_settingsitem_kml_pmname_none "None"
@@ -303,6 +329,7 @@
 #define qtn_dialog_tool_title       qtn_command
 
 // Message items
+#define qtn_msg_general_system      "Please restart the application to activate this setting."
 #define qtn_msg_start_error1        "Please input the following time at time now."
 #define qtn_msg_record_success      "It succeeded in the record of present location.\n"
 #define qtn_msg_record_fail1        "The present location is invalid.\n"
@@ -311,4 +338,22 @@
 #define qtn_msg_positioning_method2 "The positioning method was changed to \"%S\"."
 #define qtn_msg_lbs_error1          "The error of LBS(Location Based Services) occurred. Do it retry?"
 #define qtn_msg_lbs_error2          "Please restart this application."
+#define qtn_msg_lbs_sattime         "No valid satellite time."
 #define qtn_msg_copy_clipboard      "Copied to clipboard."
+
+// Memory items
+#define qtn_msg_setting_changed     "Processing..."
+#define qtn_dialog_memory_title     "Select memory:"
+#define qtn_dialog_listmemory_title "Available drives:"
+#define qtn_dialog_listmemory_invalid "Invalid drive."
+#define qtn_memory_phone			"Phone memory"
+#define qtn_memory_mmc			    "Memory card"
+#define qtn_memory_massm			"Mass memory"
+#define qtn_memory_info			    "(Drive info)"
+#define qtn_msg_path				"Path"
+#define qtn_msg_free				"Free"
+#define qtn_msg_label				"Label"
+
+#define qtn_dialog_positioning_title	"Select positioning method:"
+#define qtn_availablepositioning_title	"Available methods:"
+#define qtn_selectedpositioning_title	"Selected method:"

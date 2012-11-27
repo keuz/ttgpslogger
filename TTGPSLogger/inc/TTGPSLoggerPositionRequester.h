@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -27,18 +27,19 @@ class CActive;
 class RPositioner;
 class RPositionServer;
 class HPositionGenericInfo;
+class CTTGPSLoggerPositionData;
 class MTTGPSLoggerPositionObserver;
 
 class CTTGPSLoggerPositionRequester : public CActive
 	{
 public:
-	static CTTGPSLoggerPositionRequester* NewL();
-	static CTTGPSLoggerPositionRequester* NewLC();
+	static CTTGPSLoggerPositionRequester* NewL(TInt PositioningMethod);
+	static CTTGPSLoggerPositionRequester* NewLC(TInt PositioningMethod);
     ~CTTGPSLoggerPositionRequester();
 
 private:
     CTTGPSLoggerPositionRequester();
-    void ConstructL();
+    void ConstructL(TInt PositioningMethod);
 
 private:
 	// From CActive
@@ -52,10 +53,27 @@ public:
     void AddPositionObserver(MTTGPSLoggerPositionObserver* aObserver);
     void DeletePositionObserver(MTTGPSLoggerPositionObserver* aObserver);
 	void SetPositionModuleInfo();
+    inline CTTGPSLoggerPositionData* PosData() const
+        {
+        return iPositionData;
+        };
+    inline RPositionServer PosServer() const
+        {
+        return iPositionServer;
+        };
+    inline TInt GetPositioningMethod() const
+        {
+        return iPositioningMethod;
+        };
+    inline void SetPositioningMethod(TInt PositioningMethod)
+        {
+        iPositioningMethod=PositioningMethod;
+        };
 	
 private:
 	RPositionServer iPositionServer;
 	RPositioner iPositioner;
+    TInt iPositioningMethod;
     HPositionGenericInfo* iPositionInfo;
     CTTGPSLoggerPositionData* iPositionData;
     TPositionModuleId iPositionModuleId;

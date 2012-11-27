@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -64,6 +64,11 @@ void CTTGPSLoggerSettingsList::ConstructL(const TRect& aRect)
 	{
 	switch (iTabIndex)
 	    {
+	    case ETTGPSLoggerSettingsTabGeneral:
+	        {
+	        CAknSettingItemList::ConstructFromResourceL(R_TTGP_SETTINGITEMLIST_GENERAL);
+	        break;
+	        }
 	    case ETTGPSLoggerSettingsTabDisplay:
 	        {
 	        CAknSettingItemList::ConstructFromResourceL(R_TTGP_SETTINGITEMLIST_DISPLAY);
@@ -103,7 +108,30 @@ CAknSettingItem* CTTGPSLoggerSettingsList::CreateSettingItemL(TInt aId)
     
     switch (iTabIndex)
         {
-        case ETTGPSLoggerSettingsTabDisplay:
+
+    	case ETTGPSLoggerSettingsTabGeneral:
+            {
+            switch (aId)
+                {
+#ifdef DSYSTEM
+                case ETTGPSLoggerSettingItemGeneralSystem:
+                    {
+                    item = new (ELeave) CAknBinaryPopupSettingItem(aId, settings->GetGeneralSystem());
+                    break;
+                    }
+#endif
+#ifdef POSMETH
+                case ETTGPSLoggerSettingItemGeneralPositioningMethod:
+                    {
+                    item = new (ELeave) CTTGPSLoggerPositioningMethod(aId, settings->GetPositioningMethod());
+                    break;
+                    }
+#endif
+                }
+			break;
+			}
+    	
+    	case ETTGPSLoggerSettingsTabDisplay:
             {
             switch (aId)
                 {
@@ -141,7 +169,8 @@ CAknSettingItem* CTTGPSLoggerSettingsList::CreateSettingItemL(TInt aId)
                     }
                 case ETTGPSLoggerSettingItemOutputMemory:
                     {
-                    item = new (ELeave) CAknMemorySelectionSettingItem(aId, settings->GetOutputMemory());
+    		    	//item = new (ELeave) CAknMemorySelectionSettingItem(aId, settings->GetOutputMemory());
+					item = new (ELeave) CTTGPSLoggerSelectMemorySettingItem(aId, settings->GetOutputMemory());
                     break;
                     }
                 case ETTGPSLoggerSettingItemOutputIntervals:
@@ -213,6 +242,35 @@ CAknSettingItem* CTTGPSLoggerSettingsList::CreateSettingItemL(TInt aId)
                 case ETTGPSLoggerSettingItemGPXTags:
                     {
                     item = new (ELeave) CTTGPSLoggerCheckBoxSettingItem(aId, settings->GetGPXTags());
+                    break;
+                    }
+                case ETTGPSLoggerSettingItemGPXAuthor:
+                    {
+                    item = new (ELeave) CAknTextSettingItem(aId, settings->GetGPXAuthor());
+                    item->SetSettingPageFlags(CAknTextSettingPage::EPredictiveTextEntryPermitted);
+                    break;
+                    }
+                case ETTGPSLoggerSettingItemGPXEmail:
+                    {
+                    item = new (ELeave) CAknTextSettingItem(aId, settings->GetGPXEmail());
+                    item->SetSettingPageFlags(CAknTextSettingPage::EPredictiveTextEntryPermitted);
+                    break;
+                    }
+                case ETTGPSLoggerSettingItemGPXUrl:
+                    {
+                    item = new (ELeave) CAknTextSettingItem(aId, settings->GetGPXUrl());
+                    item->SetSettingPageFlags(CAknTextSettingPage::EPredictiveTextEntryPermitted);
+                    break;
+                    }
+                case ETTGPSLoggerSettingItemGPXUrlName:
+                    {
+                    item = new (ELeave) CAknTextSettingItem(aId, settings->GetGPXUrlName());
+                    item->SetSettingPageFlags(CAknTextSettingPage::EPredictiveTextEntryPermitted);
+                    break;
+                    }
+                case ETTGPSLoggerSettingItemGPXSegment:
+                    {
+                    item = new (ELeave) CAknBinaryPopupSettingItem(aId, settings->GetGpxSegment());
                     break;
                     }
                 }

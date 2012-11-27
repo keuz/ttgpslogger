@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -31,11 +31,19 @@
 #include "TTGPSLogger.hrh"
 #include "TTGPSLoggerSettingsData.h"
 
+#ifdef DSYSTEM
+const TBool ETTGPSLoggerSettingsGeneralSystemInitial = ETrue;
+#endif
+#ifdef POSMETH
+const TInt ETTGPSLoggerSettingsGeneralPositioningMethodInitial = 0;
+#endif
 const TInt ETTGPSLoggerSettingsDisplayMeasurementSystemInitial = CTTGPSLoggerSettingsData::ETTGPSLoggerSettingsDisplayMeasurementSystemMetric;
 const TInt ETTGPSLoggerSettingsDisplayCoordinateFormatInitial = CTTGPSLoggerSettingsData::ETTGPSLoggerSettingsDisplayCoordinateFormatDDDMMSSSS;
 const TBool ETTGPSLoggerSettingsDisplayShortcutsInitial = ETrue;
+const TBool ETTGPSLoggerSettingsGpxSegmentInitial = EFalse;
 const TInt ETTGPSLoggerSettingsOutputAutostartInitial = CTTGPSLoggerSettingsData::ETTGPSLoggerSettingsOutputAutostartDisabled;
-const CAknMemorySelectionDialog::TMemory ETTGPSLoggerSettingsOutputMemoryInitial = CAknMemorySelectionDialog::EPhoneMemory;
+//const CAknMemorySelectionDialog::TMemory ETTGPSLoggerSettingsOutputMemoryInitial = CAknMemorySelectionDialog::EPhoneMemory;
+const TInt ETTGPSLoggerSettingsOutputMemoryInitial = 0;
 const TInt ETTGPSLoggerSettingsOutputIntervalsInitial = CTTGPSLoggerSettingsData::ETTGPSLoggerSettingsOutputIntervals1Sec;
 const TInt ETTGPSLoggerSettingsOutputAutoPauseHSpeedInitial = CTTGPSLoggerSettingsData::ETTGPSLoggerSettingsOutputAutoPauseSpeedNone;
 const TInt ETTGPSLoggerSettingsOutputAutoPauseSpeedInitial = CTTGPSLoggerSettingsData::ETTGPSLoggerSettingsOutputAutoPauseSpeedNone;
@@ -61,6 +69,10 @@ CTTGPSLoggerSettingsData::~CTTGPSLoggerSettingsData()
     iNMEAExt.Close();
     iNMEASentences.Reset();
     iGPXExt.Close();
+    iGPXAuthor.Close();
+    iGPXEmail.Close();
+    iGPXUrl.Close();
+    iGPXUrlName.Close();
     iGPXTags.Reset();
     iKMLExt.Close();
     iKMLPmDescription.Reset();
@@ -83,6 +95,13 @@ CTTGPSLoggerSettingsData* CTTGPSLoggerSettingsData::NewL()
 
 void CTTGPSLoggerSettingsData::ConstructL()
 	{
+#ifdef DSYSTEM
+    iGeneralSystem = ETTGPSLoggerSettingsGeneralSystemInitial;
+#endif
+#ifdef POSMETH
+    iPositioningMethod = ETTGPSLoggerSettingsGeneralPositioningMethodInitial;
+#endif
+
     iDisplayMeasurementSystem = ETTGPSLoggerSettingsDisplayMeasurementSystemInitial;
     iDisplayCoordinateFormat = ETTGPSLoggerSettingsDisplayCoordinateFormatInitial;
     iDisplayItems.AppendL(ETTGPSLoggerSettingsDisplayItemsInitialLon);
@@ -130,10 +149,20 @@ void CTTGPSLoggerSettingsData::ConstructL()
     
     iGPXExt.CreateL(KMaxPath);
     CEikonEnv::Static()->ReadResourceAsDes16L(iGPXExt, R_TTGP_TBUF32_SETTINGS_GPX_EXT);
+    iGPXAuthor.CreateL(KMaxPath);
+    CEikonEnv::Static()->ReadResourceAsDes16L(iGPXAuthor, R_TTGP_TBUF32_SETTINGS_GPX_AUTHOR);
+    iGPXEmail.CreateL(KMaxPath);
+    CEikonEnv::Static()->ReadResourceAsDes16L(iGPXEmail, R_TTGP_TBUF32_SETTINGS_GPX_EMAIL);
+    iGPXUrl.CreateL(KMaxPath);
+    CEikonEnv::Static()->ReadResourceAsDes16L(iGPXUrl, R_TTGP_TBUF32_SETTINGS_GPX_URL);
+    iGPXUrlName.CreateL(KMaxPath);
+    CEikonEnv::Static()->ReadResourceAsDes16L(iGPXUrlName, R_TTGP_TBUF32_SETTINGS_GPX_URLNAME);
     iGPXTags.AppendL(ETTGPSLoggerSettingsGPXTagsInitialTime);
     iGPXTags.AppendL(ETTGPSLoggerSettingsGPXTagsInitialEle);
+    iGPXTags.AppendL(ETTGPSLoggerSettingsGPXTagsInitialSeaAlt);
     iGPXTags.AppendL(ETTGPSLoggerSettingsGPXTagsInitialCourse);
     iGPXTags.AppendL(ETTGPSLoggerSettingsGPXTagsInitialSpeed);
+    iGPXTags.AppendL(ETTGPSLoggerSettingsGPXTagsInitialUseVSpeed);
     iGPXTags.AppendL(ETTGPSLoggerSettingsGPXTagsInitialFix);
     iGPXTags.AppendL(ETTGPSLoggerSettingsGPXTagsInitialSat);
     iGPXTags.AppendL(ETTGPSLoggerSettingsGPXTagsInitialHdop);
@@ -201,9 +230,16 @@ void CTTGPSLoggerSettingsData::LoadL()
         	iDisplayItems[i1] = readStream.ReadInt32L();
         	}
         iDisplayShortcuts = readStream.ReadInt32L();
+#ifdef DSYSTEM
+        iGeneralSystem = readStream.ReadInt32L();
+#endif
+#ifdef POSMETH
+        iPositioningMethod = readStream.ReadInt32L();
+#endif
         iOutputAutostart = readStream.ReadInt32L();
-        TInt outputMemory = readStream.ReadInt32L();
-        iOutputMemory =  (CAknMemorySelectionDialog::TMemory)outputMemory;
+        iOutputMemory = readStream.ReadInt32L();
+        //TInt outputMemory = readStream.ReadInt32L();
+        //iOutputMemory =  (CAknMemorySelectionDialog::TMemory)outputMemory;
         readStream >> iOutputDirectory;
         iOutputIntervals = readStream.ReadInt32L();
         iOutputDistance = readStream.ReadInt32L();
@@ -219,6 +255,11 @@ void CTTGPSLoggerSettingsData::LoadL()
         	iNMEASentences[i1] = readStream.ReadInt32L();
         	}
         readStream >> iGPXExt;
+        readStream >> iGPXAuthor;
+        readStream >> iGPXEmail;
+        readStream >> iGPXUrl;
+        readStream >> iGPXUrlName;
+        iGpxSegment = readStream.ReadInt32L();
         TInt gpxTagsCount = readStream.ReadInt32L();
         for (TInt i1 = 0; i1 < gpxTagsCount; i1++)
         	{
@@ -259,6 +300,12 @@ void CTTGPSLoggerSettingsData::SaveL()
         	writeStream.WriteInt32L(iDisplayItems[i1]);
         	}
     	writeStream.WriteInt32L(iDisplayShortcuts);
+#ifdef DSYSTEM
+    	writeStream.WriteInt32L(iGeneralSystem);
+#endif
+#ifdef POSMETH
+    	writeStream.WriteInt32L(iPositioningMethod);
+#endif
         writeStream.WriteInt32L(iOutputAutostart);
         writeStream.WriteInt32L(iOutputMemory);
         writeStream << iOutputDirectory;
@@ -277,6 +324,11 @@ void CTTGPSLoggerSettingsData::SaveL()
         	writeStream.WriteInt32L(iNMEASentences[i1]);
         	}
         writeStream << iGPXExt;
+        writeStream << iGPXAuthor;
+        writeStream << iGPXEmail;
+        writeStream << iGPXUrl;
+        writeStream << iGPXUrlName;
+    	writeStream.WriteInt32L(iGpxSegment);
         TInt gpxTagsCount = iGPXTags.Count();
     	writeStream.WriteInt32L(gpxTagsCount);
         for (TInt i1 = 0; i1 < gpxTagsCount; i1++)
@@ -297,6 +349,16 @@ void CTTGPSLoggerSettingsData::SaveL()
     CleanupStack::PopAndDestroy(); // file
     }
 
+#ifdef DSYSTEM
+TBool& CTTGPSLoggerSettingsData::GetGeneralSystem()
+    {
+    return iGeneralSystem;
+    }
+TInt& CTTGPSLoggerSettingsData::GetPositioningMethod()
+    {
+    return iPositioningMethod;
+    }
+#endif
 TInt& CTTGPSLoggerSettingsData::GetDisplayMeasurementSystem()
     {
     return iDisplayMeasurementSystem;
@@ -313,11 +375,16 @@ TBool& CTTGPSLoggerSettingsData::GetDisplayShortcuts()
     {
     return iDisplayShortcuts;
     }
+TBool& CTTGPSLoggerSettingsData::GetGpxSegment()
+    {
+    return iGpxSegment;
+    }
 TInt& CTTGPSLoggerSettingsData::GetOutputAutostart()
     {
     return iOutputAutostart;
     }
-CAknMemorySelectionDialog::TMemory& CTTGPSLoggerSettingsData::GetOutputMemory()
+//CAknMemorySelectionDialog::TMemory& CTTGPSLoggerSettingsData::GetOutputMemory()
+TInt& CTTGPSLoggerSettingsData::GetOutputMemory()
     {
     return iOutputMemory;
     }
@@ -365,6 +432,22 @@ TDes& CTTGPSLoggerSettingsData::GetGPXExt()
     {
     return iGPXExt;
     }
+TDes& CTTGPSLoggerSettingsData::GetGPXAuthor()
+    {
+    return iGPXAuthor;
+    }
+TDes& CTTGPSLoggerSettingsData::GetGPXEmail()
+    {
+    return iGPXEmail;
+    }
+TDes& CTTGPSLoggerSettingsData::GetGPXUrl()
+    {
+    return iGPXUrl;
+    }
+TDes& CTTGPSLoggerSettingsData::GetGPXUrlName()
+    {
+    return iGPXUrlName;
+    }
 CArrayFix<TInt>& CTTGPSLoggerSettingsData::GetGPXTags()
 	{
     return iGPXTags;
@@ -381,6 +464,16 @@ CArrayFix<TInt>& CTTGPSLoggerSettingsData::GetKMLPmDescription()
 	{
     return iKMLPmDescription;
 	}
+#ifdef DSYSTEM
+TBool CTTGPSLoggerSettingsData::GeneralSystem() const
+    {
+    return iGeneralSystem;
+    }
+#endif
+TInt CTTGPSLoggerSettingsData::PositioningMethod() const
+    {
+    return iPositioningMethod;
+    }
 TInt CTTGPSLoggerSettingsData::DisplayMeasurementSystem() const
     {
     return iDisplayMeasurementSystem;
@@ -403,6 +496,10 @@ TInt CTTGPSLoggerSettingsData::DisplayItems(TInt aIndex) const
 TBool CTTGPSLoggerSettingsData::DisplayShortcuts() const
     {
     return iDisplayShortcuts;
+    }
+TBool CTTGPSLoggerSettingsData::GpxSegment() const
+    {
+    return iGpxSegment;
     }
 TInt CTTGPSLoggerSettingsData::OutputAutostart() const
     {
@@ -434,16 +531,19 @@ TInt CTTGPSLoggerSettingsData::OutputIntervals() const
     }
 void CTTGPSLoggerSettingsData::OutputDirectory(TDes& aDes) const
     {
-    if (iOutputMemory == CAknMemorySelectionDialog::EPhoneMemory)
-        {
-        aDes.Copy(PathInfo::PhoneMemoryRootPath());
-        aDes.Append(PathInfo::OthersPath());
-        }
-    else
-        {
-        aDes.Copy(PathInfo::MemoryCardRootPath());
-        aDes.Append(PathInfo::OthersPath());
-        }
+	switch (iOutputMemory)
+		{
+		case 2:
+			aDes.Copy(PathInfo::MemoryCardRootPath());
+			break;
+		case 3:
+			aDes.Copy(_L("f:\\"));
+			break;
+		default:
+			aDes.Copy(PathInfo::PhoneMemoryRootPath());
+			break;
+		}
+    aDes.Append(PathInfo::OthersPath());
     aDes.Append(iOutputDirectory);
     aDes.Append(KPathDelimiter);
     }
@@ -627,6 +727,22 @@ TInt CTTGPSLoggerSettingsData::NMEASentences(TInt aIndex) const
 const TDesC& CTTGPSLoggerSettingsData::GPXExt() const
     {
     return iGPXExt;
+    }
+const TDesC& CTTGPSLoggerSettingsData::GPXAuthor() const
+    {
+    return iGPXAuthor;
+    }
+const TDesC& CTTGPSLoggerSettingsData::GPXEmail() const
+    {
+    return iGPXEmail;
+    }
+const TDesC& CTTGPSLoggerSettingsData::GPXUrl() const
+    {
+    return iGPXUrl;
+    }
+const TDesC& CTTGPSLoggerSettingsData::GPXUrlName() const
+    {
+    return iGPXUrlName;
     }
 TInt CTTGPSLoggerSettingsData::GPXTags(TInt aIndex) const
     {

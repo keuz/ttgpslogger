@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -21,13 +21,20 @@
  * Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+MACRO __S60_50__=1
+MACRO DSYSTEM=1
+MACRO POSMETH=1
+MACRO GPXXSL=1
+//MACRO USELIGHTS=1
+
+
 TARGET			TTGPSLogger.exe
 TARGETTYPE		exe
 UID 0x100039CE 0xED0BE311
 
 SOURCEPATH		..\src
 USERINCLUDE	   ..\inc
-SYSTEMINCLUDE	 \epoc32\include
+SYSTEMINCLUDE	 \epoc32\include \epoc32\include\mw \epoc32\include\platform \epoc32\include\platform\mw
 
 SOURCE			TTGPSLogger.cpp
 SOURCE			TTGPSLoggerApplication.cpp
@@ -89,14 +96,16 @@ LIBRARY        lbs.lib
 LIBRARY        platformenv.lib
 LIBRARY        tzclient.lib
 LIBRARY        ws32.lib
+LIBRARY        sysutil.lib
 // S60 5th, and S60 3rd FP2 Only
 LIBRARY        satinfo.lib
+LIBRARY        hwrmlightclient.lib
 
 LANG SC
 
 VENDORID	  	  0
 SECUREID		  0xED0BE311
-CAPABILITY	  	  Location
+CAPABILITY	  	  WriteDeviceData Location
 
 #ifdef ENABLE_ABIV2_MODE
 DEBUGGABLE_UDEBONLY

@@ -4,7 +4,7 @@
  * TTGPSLogger, a GPS logger for Symbian S60 smartphones.
  * Copyright (C) 2009 TTINPUT <ttinputdiary@ovi.com>
  * 
- * http://ttinputdiary.vox.com/
+ * Updated by amacri@tiscali.it
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -178,6 +178,10 @@ void CTTGPSLoggerRecorderFormatNMEA::SetBodyL(TDes8& aBody, const TDesC& aFileNa
     	ptr.Set(ptr.Mid(retPos + 1));
     	
     	}
+    }
+
+void CTTGPSLoggerRecorderFormatNMEA::SetSegmentL(TDes8& aBody)
+    {
     }
 
 void CTTGPSLoggerRecorderFormatNMEA::SetFooterL(TDes8& aFooter)
